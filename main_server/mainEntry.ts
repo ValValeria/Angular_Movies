@@ -26,7 +26,7 @@ app.use((req:any,resp:any,next:any)=>{
     newH.status_of_user(req,resp,next)
 });
 app.post('/addpost',upload.single('videoUrl'),(req:any,res:any)=>{
-    newH.uploadPost(req,res)
+    c(newH.uploadPost(req,res),res);
 })
 app.use('/public/:filename',(req:any,resp:any,next:any)=>{
     newH.getFile(req,resp,next)

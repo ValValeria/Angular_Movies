@@ -60,6 +60,14 @@ export interface LoadModelsI{
     has?:Dependency,
     bel?:Dependency
 }
+export interface ResultSetHeader{
+  fieldCount: number;
+  affectedRows: number;
+  insertId: number;
+  info: number;
+  serverStatus: number;
+  warningStatus: number;
+}
 export interface Unique{
     has?:any[],
     belTo?:any[]

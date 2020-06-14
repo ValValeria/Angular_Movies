@@ -1,7 +1,7 @@
 import { Models, ModelNames } from "../../models/nameofmodels";
 
 import { User1,Post1} from "../../models/tables/Models";
-import { Statement, Unique } from "../../interfaces/interfaces";
+import { Statement, Unique, ResultSetHeader } from "../../interfaces/interfaces";
 
 type main=keyof Models
 namespace Con{
@@ -18,22 +18,27 @@ namespace Con{
                 connectionLimit:100000
             }).promise();
       }
-      async query(obj:Statement):Promise<Models[]|null>{
+      async query(obj:Statement,content?:Models):Promise<Models[]|null>{
          this.attr=obj.attr ||[]
-         return  this.connection.query(obj.statement) 
-                 .then((result:any[])=>{console.log(result[0]);return result[0]})
+         return  this.connection.execute(obj.statement) 
+                 .then((result:any[])=>result[0])
                  .then(async (res:Models[])=>{
-                     console.log('in then')
+                   console.log('in then')
                    if(obj.hasOwnProperty('notloadModels')){
                        if(obj.notloadModels)  {
                            return null;
                        }
                    } 
+                   let isTrue=false;
+                   if((res[0] as ResultSetHeader).insertId){
+                       isTrue=true;
+                   }
                    switch(obj.model as ModelNames){
                        case ModelNames.User:
-                           console.log('i am ')
+                           if(isTrue && content)  return   await this.addUsers([{...content,id:(res[0] as ResultSetHeader).insertId}],{has:obj.has,belTo:obj.belTo});
                            return   await this.addUsers(res,{has:obj.has,belTo:obj.belTo});
                        case ModelNames.Post:
+                           if(isTrue && content)  return   await this.addPosts([{...content,id:(res[0] as ResultSetHeader).insertId}],{has:obj.has,belTo:obj.belTo});
                            return   await this.addPosts(res,{has:obj.has,belTo:obj.belTo});
                        default:
                            return  null;

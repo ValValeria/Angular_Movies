@@ -49,7 +49,7 @@ abstract class BaseMainClass <T extends Models>  {
         return  new LoadModels.Load(this).addBelTo(obj)
     }
     addHas(obj:Models&{id:number}):Promise<any>|never{//?
-        return  new LoadModels.Load(this).addBelTo(obj)
+        return  new LoadModels.Load(this).addHasTo(obj)
 
     }
     toJSON(){

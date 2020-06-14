@@ -17,7 +17,7 @@ namespace Act{
            }
            create(query: T & Mod ): Promise<Models[]> {
                const fields=confingD[query.model].fields
-
+                 
                const names:string[]=[]
                fields.forEach((elem:object,index:number)=>{
                   const types:[string,'string'|'number']=Object.entries(elem)[0];
@@ -35,8 +35,8 @@ namespace Act{
                 
                })
                this.query=`INSERT INTO ${query.model}(${[...names]}) VALUES(`.concat(this.query)
-               console.log(this.query)
-               return new MysqlConT().query({statement:this.query,model:query.model,has:[],belTo:[],attr:[]})
+               let cont=Object.fromEntries(Object.entries(query).filter(([key])=>!this.forbidden.has(key)))
+               return new MysqlConT().query({statement:this.query,model:query.model,has:[],belTo:[],attr:[]},cont)
 
             }
             updateDependency(obj:T&Mod&{main_id:number}):Promise<any>{
