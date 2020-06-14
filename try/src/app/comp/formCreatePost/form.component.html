@@ -1,0 +1,40 @@
+<div>
+    <form  [formGroup]="form" [formData]="form" id="my"[isValidVideo]="isValidVideo && videoUrl">
+        <div class="login-div">
+            <div class="logo"></div>
+            <div class="title">Create your Post</div>
+            <div class="sub-title">BETA</div>
+            <div class="fields">
+              <div class="username"><input type="text" name="name"formControlName="name"class="user-input" placeholder="Title"/></div>
+              <textarea class="username somsa" name="p1" formControlName="p1">
+                Your content
+              </textarea>
+            </div>
+        <div >
+            <input type="file" (change)="changeFiles()" name="videoUrl"formControlName="videoUrl"  hidden #f/>
+            <div class="yourvideo" #yourvideo></div>
+        </div>
+
+        <ng-container #container></ng-container>
+        <ng-template #template  let-message="message" let-id="id ">
+          <div *ngFor="let mes of message" class="errors1">
+             <div>
+              <div>{{mes}}
+                <ng-template [ngIf]="id">
+                    <a routerLink="/posts/{{id}}">Доступен по ссылке ....</a>
+                </ng-template>
+             </div>
+            </div>
+          </div>
+        </ng-template>
+
+        <button class="signin-button" (click)="click($event)">Upload a video</button>
+        <br/>
+        <br/>
+        
+        <button class="signin-button"  type="submit">Create</button>
+        
+        </div>
+    </form>
+
+</div>

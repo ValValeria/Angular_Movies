@@ -1,0 +1,12 @@
+{
+  "compilerOptions": {
+    "noImplicitAny": true,
+    "module": "ES2020",
+    "allowJs": false,
+    "allowSyntheticDefaultImports":true,
+    "target": "ES2020",
+  },
+  "exclude":[
+    "try","node_modules"
+  ]
+}

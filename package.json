@@ -1,0 +1,32 @@
+{
+  "name": "angular",
+  "version": "1.0.0",
+  "description": "Angular App",
+  "main": "main_server/mainEntry.ts",
+  "scripts": {
+    "start": "webpack -p --mode=development && node dist/server.js ",
+    "build": "cross-env TS_NODE_PROJECT=\"tsconfig-for-webpack-config.json\" webpack"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@babel/core": "^7.10.2",
+    "@babel/preset-env": "^7.10.2",
+    "@babel/preset-typescript": "^7.10.1",
+    "@types/node": "^14.0.6",
+    "@types/webpack": "^4.41.16",
+    "@types/webpack-env": "^1.15.2",
+    "babel-loader": "^8.1.0",
+    "body-parser": "^1.19.0",
+    "express": "^4.17.1",
+    "multer": "^1.4.2",
+    "mysql2": "^2.1.0",
+    "sequelize": "^5.21.11",
+    "source-map-loader": "^1.0.0",
+    "ts-loader": "^7.0.5",
+    "typescript": "^3.9.3",
+    "webpack": "^4.43.0",
+    "webpack-cli": "^3.3.11",
+    "webpack-node-externals": "^1.7.2"
+  }
+}
