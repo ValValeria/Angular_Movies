@@ -52,7 +52,8 @@ export interface Mod{
     or?:boolean,
     has?:names[],
     belongTo?:names[],
-    attr?:f[]
+    attr?:f[],
+    limit?:number
 }
 export interface LoadModelsI{
     fmodelName?:ModelNames,

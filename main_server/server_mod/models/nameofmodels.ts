@@ -10,14 +10,14 @@ export const obj1=["userId","postId"]
 
 export const confingD:intr={
    [ModelNames.User]:{
-       class:  User1,
+       class:  'User1',
        name:"users",
        key:"userId",////ключи в зависимых моделях,
        otherFields:[],///ключи других моделей в таблице,
        fields:[{'name':'string'},{'email':'string'},{'password':"string"},{id:'number'}]
    },
    [ModelNames.Post]:{
-       class:  Post1,
+       class:  'Post1',
        name:"posts",
        key:"postId",
        fields:[],

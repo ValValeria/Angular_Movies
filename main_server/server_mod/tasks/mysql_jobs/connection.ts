@@ -20,25 +20,37 @@ namespace Con{
       }
       async query(obj:Statement,content?:Models):Promise<Models[]|null>{
          this.attr=obj.attr ||[]
-         return  this.connection.execute(obj.statement) 
-                 .then((result:any[])=>result[0])
-                 .then(async (res:Models[])=>{
+         console.log(obj.statement)
+         return  this.connection.query(obj.statement) 
+                 .then((result:any[])=>{
+                     if(!result[0][0] && (result[0] as ResultSetHeader).insertId){
+                          return [result[0]]
+                     }
+                     return result[0]
+                   })
+                 .then(async (res:Models[]|ResultSetHeader[])=>{
                    console.log('in then')
                    if(obj.hasOwnProperty('notloadModels')){
                        if(obj.notloadModels)  {
                            return null;
                        }
                    } 
+
                    let isTrue=false;
                    if((res[0] as ResultSetHeader).insertId){
                        isTrue=true;
+                       console.log('Inserted value')
                    }
+                   
                    switch(obj.model as ModelNames){
                        case ModelNames.User:
                            if(isTrue && content)  return   await this.addUsers([{...content,id:(res[0] as ResultSetHeader).insertId}],{has:obj.has,belTo:obj.belTo});
                            return   await this.addUsers(res,{has:obj.has,belTo:obj.belTo});
                        case ModelNames.Post:
-                           if(isTrue && content)  return   await this.addPosts([{...content,id:(res[0] as ResultSetHeader).insertId}],{has:obj.has,belTo:obj.belTo});
+                           if(isTrue && content) {
+                            console.log('i am here')
+                            return   await this.addPosts([{...content,id:(res[0] as ResultSetHeader).insertId}],{has:obj.has,belTo:obj.belTo});
+                           } 
                            return   await this.addPosts(res,{has:obj.has,belTo:obj.belTo});
                        default:
                            return  null;
@@ -50,8 +62,6 @@ namespace Con{
       }
       private async add(cl:any,ar:any[],obj:Unique){
         const promises=ar.map(async (elem)=>{
-            console.log(elem)
-            console.log('||||||||||||')
             if(Object.keys(obj.has).length || Object.keys(obj.belTo).length){
                 return new cl(elem,obj,this.attr).LoadModels()
             }
@@ -63,6 +73,8 @@ namespace Con{
           return this.add(User1,ar,obj);
       }
       private  async addPosts(ar:any[],obj:Unique){
+          console.log(ar)
+          console.log("|||")
           return this.add(Post1,ar,obj);
       }
   }

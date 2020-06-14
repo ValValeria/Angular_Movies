@@ -12,6 +12,7 @@ export  class User1 extends BaseMainClass<User> implements User {
     public fhasMany:ModelNames[]=[ModelNames.Post]
     public fbelongsTo:ModelNames[]=[]
     public auth:boolean;
+    public classname:string=`User1`
     constructor(obj?:User,protected fconfig?:Unique|null, attr?:user_t[]){
          super(obj,fconfig,User1.fmodelName,attr)  
     }

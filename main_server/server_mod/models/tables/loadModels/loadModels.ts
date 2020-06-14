@@ -25,7 +25,7 @@ namespace LoadModels{
                         objNew={id:this.mainobj.fdiff[this.nameOfMod(elem)[1].key],model:this.nameOfMod(elem)[0]};
                     }
                     console.log(this.mainobj.id)
-                    const p=await new Action().select(objNew,this.mainobj);
+                    const p=await new Action().select(objNew);
                     if(number==1)this.mainobj.has[this.nameOfMod(elem)[1].name]=p;
                     else if(number==2) this.mainobj.bel[this.nameOfMod(elem)[1].name]=p;
     
@@ -57,15 +57,16 @@ namespace LoadModels{
                 return false;
             }));
         }
-        addBelTo(obj:Models&{id:number}):Promise<void|Models&LoadModelsI>|never
+        addBelTo(obj:Models&{id:number}&{classname?:string}):Promise<void|Models&LoadModelsI>|never
         {
-            console.log('in addBelTo')
             const cl=confingD[this.mainobj.fmodelName].otherFields.find((elem)=>{
-                if(obj instanceof elem.model.class){
+                console.log(Object.getPrototypeOf(obj).constructor.name)
+                if( obj.classname==elem.model.class){
                      return true
                 }
                 return null
            })
+           console.log(cl)
            if(cl){
              const key=cl.key
              return new Action().updateDependency({[key]:obj.id,model:this.mainobj.fmodelName,main_id:this.mainobj.id})

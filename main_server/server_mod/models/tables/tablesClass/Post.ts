@@ -11,7 +11,7 @@ export class Post1  extends BaseMainClass<Post> implements Post{
     static fmodelName:ModelNames=ModelNames.Post
     fhasMany:ModelNames[]=[]
     fbelongsTo:ModelNames[]=[ModelNames.User]
-
+    classname:string=`Post1`
     constructor(obj?:Post,protected fconfig?:Unique|null, attr?:post_t[]){
         super(obj,fconfig,Post1.fmodelName,attr)
     }

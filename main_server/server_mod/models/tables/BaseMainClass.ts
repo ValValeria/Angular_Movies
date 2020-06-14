@@ -22,6 +22,7 @@ abstract class BaseMainClass <T extends Models>  {
    
     select(obj?:T&Mod):Promise<Models[]>{
         const query: T &Mod={...obj,model:this.fmodelName}
+        console.log(obj)
         return new Action<T>().select(query)
     }
     async LoadModels():Promise<any>{
@@ -43,7 +44,7 @@ abstract class BaseMainClass <T extends Models>  {
     }
     create(obj:T):Promise<Models[]>{
         const query: T &Mod={...obj,model:this.fmodelName}
-        return new Action().create(query)
+        return new Action<T>().create(query)
     }
     addBelTo(obj:Models&{id:number}):Promise<any>|never{//?
         return  new LoadModels.Load(this).addBelTo(obj)

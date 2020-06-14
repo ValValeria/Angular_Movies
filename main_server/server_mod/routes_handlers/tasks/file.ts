@@ -22,15 +22,14 @@ export abstract class FileHandle extends AuthReq{
     }
     async uploadPost(req:{file:{mimetype:string,size:number,path:string},body:Post},resp:any){
            if(req.file.mimetype==="video/mp4" && this.user.auth && req.file.size<59191200){
-              console.log(Object.assign({},{...req.body},{videoUrl:req.file.path}))
-              const post=await P.create(Object.assign({},{...req.body},{videoUrl:req.file.path}))
+
+              const post= await P.create(Object.assign({},{...req.body},{videoUrl:req.file.path}))
               console.log('in upload after await'+JSON.stringify(post))
-              await post[0].addBelTo(this.user)
-               console.log('in upload after await')
+              if(post[0]) await post[0].addBelTo(this.user)
+              console.log('in upload after await')
               this.response.status='Added';
               this.response.id=post[0].id
            }else{
-              console.log(this.user)
               this.response.errors.push('You are not authenticated ')
            }
            return resp.json(this.response);

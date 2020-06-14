@@ -50,7 +50,7 @@ class Handle extends FileHandle{
     }
 
     async posts(_req:any,resp:any,next?:any){
-        let posts =await P.select();
+        let posts =await P.select({limit:3});
         return resp.json(posts)
     }
     async post(req:any,resp:any,next?:any){
