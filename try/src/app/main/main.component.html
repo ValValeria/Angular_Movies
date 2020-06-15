@@ -24,7 +24,7 @@
             
             <div *ngIf="!loading ">
                 <div *ngFor="let page of pages;let i=index" >
-                    <card [title]="page.name" [content]="page.p1" [id]="page.id"></card>
+                    <card [title]="page.title" [content]="page.p1" [id]="page.id"></card>
                 </div>
                 <div *ngIf="pages.length==0">
                     <div>

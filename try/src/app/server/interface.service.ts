@@ -1,5 +1,5 @@
 export interface PostsInterface{
-    name:string,
+    title:string,
     p1:string,
     videoUrl?:string,
     id?:number

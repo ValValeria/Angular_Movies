@@ -32,8 +32,14 @@ export  class HttpService  implements Resolve<any>{
     
    resolve(route: import("@angular/router").ActivatedRouteSnapshot, state: import("@angular/router").RouterStateSnapshot) {
         if(state.url=="/"){
+           if(this.posts.length){
+             return of(this.posts)
+           }
            return this.resolve_main_page(route,state);
         }else if(state.url.includes('/channels')){
+          if(this.Users.length){
+            return of(this.Users)
+          }
           return this.resolve_channel(route,state,true);
         }
         else{

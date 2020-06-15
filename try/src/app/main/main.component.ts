@@ -13,19 +13,7 @@ import { trigger, query, transition, style, group, animate, state } from '@angul
         selector:'my-main',
         templateUrl:'./main.component.html',
         styleUrls:['./main.component.css'],
-        animations:[
-            trigger('animationTriggerName', [
-                
-                transition('* => *',
-                [
-                    query('#banner_animation_text', style({ opacity: 0 })),
-             
-                    // animate the inner elements in, one by one
-                    query('#banner_animation_text', animate(1000, style({ opacity: 1 }))),
-                ]
-                )
-            ])
-        ]
+        
     })
 export default class Main implements OnInit{
 
