@@ -30,7 +30,7 @@ export default class SignUp {
         "password":new FormControl(null,[
             Validators.required
         ]),
-        "name":new FormControl(null,[
+        "username":new FormControl(null,[
             Validators.required
         ])
     })
