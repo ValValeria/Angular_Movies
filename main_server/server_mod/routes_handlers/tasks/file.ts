@@ -25,9 +25,7 @@ export abstract class FileHandle extends AuthReq{
            if(req.file.mimetype==="video/mp4" && this.user.auth && req.file.size<59191200){
 
               const post= await P.create(Object.assign({},{...req.body},{videoUrl:req.file.path}))
-              console.log('in upload after await'+JSON.stringify(post))
               if(post[0]) await post[0].addBelTo(this.user)
-              console.log('in upload after await')
               this.response.status='Added';
               this.response.id=post[0].id
            }else{

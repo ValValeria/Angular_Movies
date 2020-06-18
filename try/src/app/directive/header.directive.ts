@@ -14,24 +14,27 @@ export class Move{
       this.parent=this.renderer.parentNode(this.element.nativeElement);
     }
     ngOnInit(){
-      this.set_fun(document.documentElement.scrollTop)
-      fromEvent(window,'scroll')
-      .subscribe(()=>{
-          const scrollTop=document.documentElement.scrollTop;
-          this.set_fun(scrollTop);
-      })
+        this.renderer.addClass(this.parent,'gray')  
+        this.renderer.setStyle(this.parent,'background','white')
+        
+        fromEvent(window,'scroll')
+        .subscribe(()=>{
+            const scrollTop=document.documentElement.scrollTop;
+            this.set_fun(scrollTop);
+        })
     }
     public set_fun(number:number){
-            if(this.router.url=="/"){
-                if(number<100 ){
-                    this.renderer.setStyle(this.parent,'background-color','transparent')
-                    this.renderer.removeClass(this.parent,'gray')
+          if(this.router.url=="/"){
+            if(number<100 ){
+                this.renderer.setStyle(this.parent,'background-color','transparent')
+                this.renderer.removeClass(this.parent,'gray')
 
-                }else{
-                    this.renderer.removeStyle(this.parent,'background-color')
-                    this.renderer.addClass(this.parent,'gray')
-                }
+            }else{
+                this.renderer.removeStyle(this.parent,'background-color')
+                this.renderer.addClass(this.parent,'gray')
             }
+
+          }
     }
     
 }

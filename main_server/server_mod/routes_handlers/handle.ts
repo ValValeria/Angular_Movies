@@ -4,12 +4,15 @@ import {U} from '../models/tables/tablesClass/User'
 import { P, Post1 } from '../models/tables/tablesClass/Post'
 
 import { FileHandle } from './tasks/file'
-import { User, Res } from '../interfaces/interfaces'
+import { User, Res, Paths } from '../interfaces/interfaces'
+import { Store } from '../data/data.mysql'
+import { Models } from '../models/nameofmodels'
 
 class Handle extends FileHandle{
 
     protected user:User=AuthUser.user
     protected response:Res
+    protected counter:number=0
     constructor(){ 
         super();
         this.response={messages:[],status:'guest',errors:[]}
@@ -17,8 +20,8 @@ class Handle extends FileHandle{
     
     status_of_user(req:any,res:any,next?:any){
         this.set_cors_policy(res)
-        .then(()=>{
-            return this.set_user(req,res)
+        .then(async ()=>{
+            return  await this.set_user(req,res)
         })
         .then(()=>{
             if(next) next();
@@ -35,37 +38,43 @@ class Handle extends FileHandle{
         res.set("Access-Control-Allow-Credentials", "true" );
         return Promise.resolve()
     }
-    async set_user(req:any,_res:any):Promise<any>{
-        if(req.get('Authorization')){
-            const auth:User=JSON.parse(req.get('Authorization'))
-            if((auth as User).name){
-             const user= await U.select({name:auth.name,and:true,email:auth.email})
-             console.log('auth')
-             if(user && user[0]){
-                    this.response.status="user"   
-                    this.user={...user[0],auth:true}
-             }
-            }else return null
-        }else  return null;
-    }
+   
 
     async posts(_req:any,resp:any,next?:any){
-        let posts =await new Post1().select({limit:3,belTo:[{key:'users',include_attr:['name','id_u']}]});///1-select rows
-        ///key-name of model
-        ///include_attr-what attributes to include
-        ///attr-which attributes to exclude
-        return resp.json(posts)
+        if(Store.exists({path:'posts'})){
+            return resp.json(Store.exists({path:'posts'}))
+        }else{
+            let posts =await new Post1().select({limit:3,belTo:[{key:'users',include_attr:['name','id_u']}]});///1-select rows
+            ///key-name of model
+            ///include_attr-what attributes to include
+            ///attr-which attributes to exclude
+            Store.add({path:'posts'},posts)
+            return resp.json(posts)
+        }
     }
     async post(req:any,resp:any,next?:any){
+        let obj:Paths={path:'post',id:req.params.id};
+        let data=Store.exists({path:'post',id:req.params.id})
+        if(data){
+            return  resp.json(data[0])
+        }
         let post=await new Post1().select({id:req.params.id});
-        return  resp.json(post[0])
+        Store.add(obj,post)
+        return resp.json(post[0])
     }
     async channels(_rq:any,resp:any,next:any){
-        let channel= await  U.select({attr:['password','email'],has:[{key:'posts',include_attr:['id','title','videoUrl']}]});
-        ///attr-which attributes to exclude
-        return resp.json(channel)
+        let data=Store.exists({path:'channels'});
+        console.log()
+        if(data){
+            return resp.json(data);
+        }else{
+            let channel= await  U.select({attr:['password','email'],has:[{key:'posts',include_attr:['id','title','videoUrl']}]});
+            ///attr-which attributes to exclude
+            Store.add({path:'channels'},channel)
+            return resp.json(channel)
+        }
     }
-   
+    
 }
 const newH=new Handle();
 export {newH};

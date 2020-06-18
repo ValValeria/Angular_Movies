@@ -1,9 +1,35 @@
-import { Login, Res } from "../../interfaces/interfaces"
+import { Login, Res, User } from "../../interfaces/interfaces"
 import { U } from "../../models/tables/tablesClass/User"
 
 export class AuthReq{
     protected response:Res={messages:[],status:'guest',errors:[]}
+    protected user:User;
 
+    set_user(req:any,_res:any):Promise<any>{
+        return new Promise(async (resolve,_reject)=>{
+           if(!this.user.auth){
+            if(req.get('Authorization')){
+                const auth:User=JSON.parse(req.get('Authorization'))
+                if((auth as User).name){
+                 const user= await U.select({name:auth.name,and:true,email:auth.email})
+                 if(user && user[0]){
+                        this.response.status="user"   
+                        this.user={...user[0],auth:true}
+                 }else{
+                     _reject();
+                 }
+                }else resolve()
+            }else  resolve();
+           }else resolve()
+        })
+    }
+    /**
+     * 
+      Ключевое слово await заставит интерпретатор JavaScript
+      ждать до тех пор, пока промис справа от await не выполнится. 
+      После чего оно вернёт его результат, и выполнение кода продолжится.
+
+     */
     addUser(req: any, resp: any, _next: any) {
         const body:Login=req.body
         U.select({name:body.name,or:true,email:body.email})

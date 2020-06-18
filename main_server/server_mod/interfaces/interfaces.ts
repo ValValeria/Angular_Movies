@@ -10,7 +10,10 @@ export interface js{
     has?:[{key:string,modelName:ModelNames,model:js}]
     mainkey:string
 }
-
+export interface Paths{
+    path:'channels'|'posts'|'post',
+    id?:number
+}
 export type intr = {
     [prop in ModelNames | string]: js;
 };
