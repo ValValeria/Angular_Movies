@@ -46,7 +46,7 @@ app.get('/channels',(_req:any,res:any,_next:any)=>{
 app.get('/posts',(req:any,res:any,next:any)=>{
     c(newH.posts(req,res,next),res)
 })
-app.get('/post',(req:any,res:any,next:any)=>{
+app.get('/post/:id',(req:any,res:any,next:any)=>{
     c(newH.post(req,res,next),res)
  })
  app.listen(8000,()=>{

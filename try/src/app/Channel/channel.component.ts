@@ -6,7 +6,8 @@ import { ActivatedRoute, Router } from '@angular/router';
 
 
 @Component({
-    templateUrl:'./channel.component.html'
+    templateUrl:'./channel.component.html',
+    styleUrls:['./channel.component.css']
 })
 
 export class Channel{

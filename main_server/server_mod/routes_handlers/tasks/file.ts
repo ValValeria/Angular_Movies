@@ -1,4 +1,4 @@
-import path from 'path'
+import path, { resolve } from 'path'
 import fs from 'fs';
 import { AuthReq } from './auth';
 import { Res, User, Post } from '../../interfaces/interfaces';
@@ -12,14 +12,14 @@ export abstract class FileHandle extends AuthReq{
     protected user:User;
 
     async  getFile(req:any,resp:any,next?:any){
-        console.log('in getFile method')
-
-        const file=path.join(this.publicpath,req.params.filename);
-        fs.access(file, fs.constants.F_OK, (err) => {
-           if(err) return resp.status(404)
-           resp.sendFile(file)
-        })
-        return ;
+       return new Promise(resolve=>{
+         const file=path.join(this.publicpath,req.params.filename);
+         fs.access(file, fs.constants.F_OK, (err) => {
+            if(err) return resp.status(404)
+            resp.sendFile(file)
+            resolve()
+         })
+       })
     }
     async uploadPost(req:{file:{mimetype:string,size:number,path:string},body:Post},resp:any){
            if(req.file.mimetype==="video/mp4" && this.user.auth && req.file.size<59191200){

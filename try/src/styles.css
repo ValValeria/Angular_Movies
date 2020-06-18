@@ -1,6 +1,7 @@
 /* You can add global styles to this file, and also import other style files */
 @import url('https://fonts.googleapis.com/css2?family=Baloo+2&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Open+Sans&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Roboto&display=swap');
 
 
 *{
@@ -10,23 +11,38 @@
 }
 
 .active {
-  border: 1px solid white;
   padding: 5px 55px;
-  border-radius: 17px;
-  background-color:#f9f9f9;
   color:#313d4c !important;
+  
 }
-
+ 
+body:first-child{
+  padding-top:150px ;
+}
+.sec::after{
+  background-image: url(https://d1o6pphsuqk08k.cloudfront.net/assets/img/svg/landing/orange-cloud.svg);
+  content:"";
+  display:block;
+  position:absolute;
+  width:100%;
+  height:100%;
+  top:96px;
+  left:0;
+  max-height:85%;
+  z-index:-1;
+  background-size:20%;
+}
 body{
     min-height:100vh;
     padding:5%;
-    padding-top:150px;
-    font-family: 'Baloo 2', cursive;
+    padding-top:0 !important;
+  /*  font-family: 'Baloo 2', cursive;
   /*  font-family: 'Open Sans', sans-serif;*/
     overflow-x: hidden;
     padding-bottom:150px;
     height:auto !important;
     position:relative;
+    font-family: 'Roboto', sans-serif !important;
 }
 
 .errors1{
@@ -59,6 +75,8 @@ a,a:focus{
   padding-right: 30px;
   margin: 0 auto;
   line-height: 1.6;
+  position: relative;
+  z-index: 4;
 }
 .hero-content {
   text-align: center;
@@ -96,13 +114,18 @@ a,a:focus{
     font-size: 16px;
     text-align: center;
     width: 100vw;
-    min-height:90vh;
-    transform: translate(-5%, -5%);
-    background-image:url('http://localhost:8000/public/orig.webp');
+    min-height:100vh;
+    transform: translate(-5%,0);
+    background-image: linear-gradient(to bottom right,#fd545d 0,#ffb435 100%);
+    position:relative;
     display:flex;
     align-items:center;
+    background-size:cover;
+    padding-top:200px;
 }
-
+/*
+box-shadow: 0 20px 32px rgba(0,0,0,.2);
+*/
 .btn-action {
   background-color: #fff;
   color: #fe4f58;
@@ -119,6 +142,17 @@ a,a:focus{
   transition: all .3s;
   margin: 20px auto;
   min-width: 400px;
+}
+.btn-action-orange{
+  color: #000000;
+    font-size: 21px;
+    font-family: 'Roboto',Arial,sans-serif;
+    line-height: 1.55;
+    font-weight: 700;
+    border-width: 0px;
+    border-radius: 0px;
+    background-color: #ffe100;
+    background-position: center center;
 }
 .hero-title {
   font-size: 56px;

@@ -1,7 +1,7 @@
 import {AuthUser} from '../data/data.user'
 
 import {U} from '../models/tables/tablesClass/User'
-import { P } from '../models/tables/tablesClass/Post'
+import { P, Post1 } from '../models/tables/tablesClass/Post'
 
 import { FileHandle } from './tasks/file'
 import { User, Res } from '../interfaces/interfaces'
@@ -50,14 +50,14 @@ class Handle extends FileHandle{
     }
 
     async posts(_req:any,resp:any,next?:any){
-        let posts =await P.select({limit:3,belTo:[{key:'users',include_attr:['name','id_u']}]});///1-select rows
+        let posts =await new Post1().select({limit:3,belTo:[{key:'users',include_attr:['name','id_u']}]});///1-select rows
         ///key-name of model
         ///include_attr-what attributes to include
         ///attr-which attributes to exclude
         return resp.json(posts)
     }
     async post(req:any,resp:any,next?:any){
-        let post=await P.select({id:req.query.id});
+        let post=await new Post1().select({id:req.params.id});
         return  resp.json(post[0])
     }
     async channels(_rq:any,resp:any,next:any){

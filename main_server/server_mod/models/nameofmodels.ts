@@ -37,7 +37,7 @@ confingD[ModelNames.User].has= [{/// models which depend on  User (has users key
     key:confingD[ModelNames.User].key,modelName:ModelNames.Post,model:confingD[ModelNames.Post]
 }]
 confingD[ModelNames.Post].fields=[{"p1":"string"},{"title":'string'},
-{"videoUrl":"string"},{[confingD[ModelNames.User].key]:"number"}]
+{"videoUrl":"string"},{[confingD[ModelNames.User].key]:"number"},{'id':'number'}]
 
 Object.freeze(confingD);
 

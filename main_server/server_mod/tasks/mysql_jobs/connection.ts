@@ -17,7 +17,7 @@ namespace Con{
                 password:"Eu6f3raCnq",
                 database:"C5CTjjXhqo",
                 user:"C5CTjjXhqo",
-                connectionLimit:100000
+                connectionLimit:1000000000000
             }).promise();
       }
       async query(obj:Statement,content?:Models,loadMany:boolean=false):Promise<Models[]|null>{
@@ -35,6 +35,9 @@ namespace Con{
                    let isTrue=false;
                    if((res[0] as ResultSetHeader).insertId){
                        isTrue=true;
+                   }
+                   if(Object.keys(res[0]).length){
+                       console.log('there is data')
                    }
                    let decide=async (method:Function)=>{
                     if(isTrue && content) {

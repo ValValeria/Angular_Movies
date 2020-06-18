@@ -52,32 +52,8 @@ namespace Act{
             }
             select(obj:T&Mod,obj1?:any):Promise<Models[]>{
                
-               this.query=`SELECT * FROM ${obj.model}`
-               const set=new Set(Object.entries(obj).filter(([x])=>!this.forbidden.has(x)))
-    
-               if(set.size>0){
-                   const obj1:string=Array.from(set).map(([key,value])=>{
-                       if(this.sql.includes(key)){
-                           return ` ${key}  `
-                       }else if(!this.forbidden.has(key)){
-                           const find= confingD[obj.model].fields.find((elem:{[prop:string]:string})=>{
-                               return Object.keys(elem)[0]==key
-                           })
-                           if(find){
-                                 const find1=Object.values(find)[0]
-                                 switch(find1){
-                                     case "string":
-                                        return ` ${key} = "${value}"`;
-                                     case "number":
-                                        return ` ${key} = ${value}`
-                                 }
-                           }else{
-                               throw new Error('In function.ts keys error');
-                           }
-                       }
-                   }).join(" ")
-                  this.query+=` WHERE ${obj1}`
-               }
+               this.query=`SELECT * FROM ${obj.model}`.concat(this.whereQueryReturn(obj))
+               
                return new MysqlConT().query({statement:this.next(obj,this.query),model:obj.model,has:[],belTo:[],attr:[]}) 
             }
             next(obj:T&Mod,query:string){
@@ -89,6 +65,36 @@ namespace Act{
 
             async selectQuery(arg0: { query: string; model: ModelNames }) {
                 return new MysqlConT<T>().query({statement:arg0.query,model:arg0.model,has:[],belTo:[],attr:[]},null,true) 
+            }
+
+            whereQueryReturn(obj:Models&Mod):string{
+                const set=new Set(Object.entries(obj).filter(([x])=>!this.forbidden.has(x)))
+    
+                if(set.size>0){
+                    const obj1:string=Array.from(set).map(([key,value])=>{
+                        if(this.sql.includes(key)){
+                            return ` ${key}  `
+                        }else if(!this.forbidden.has(key)){
+                            const find= confingD[obj.model].fields.find((elem:{[prop:string]:string})=>{
+                                return Object.keys(elem)[0]==key
+                            })
+                            if(find){
+                                  const find1=Object.values(find)[0]
+                                  switch(find1){
+                                      case "string":
+                                         return ` ${key} = "${value}"`;
+                                      case "number":
+                                         return ` ${key} = ${value}`
+                                  }
+                            }else{
+                                throw new Error('In function.ts keys error');
+                            }
+                        }
+                    }).join(" ")
+                  return ` WHERE ${obj1}`
+                }
+                return ''
+               
             }
                  
     }

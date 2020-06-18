@@ -43,10 +43,11 @@ namespace LoadModels{
                     }
                   
                     if(array.indexOf(elem)==array.length-1){
-                        let query=`SELECT ${column_names.join(' , ')} FROM  ${table} ${join.join(' ')}`
+                        let query=`SELECT ${column_names.join(' , ')} FROM  ${table} ${join.join(' ')} ${new Action<T>().whereQueryReturn(this.obj)}`
                         if(this.obj.limit) query+=`  LIMIT  ${this.obj.limit}  `
                         console.log(query)
                         console.log('|||')
+
                         const p=await new Action<T>().selectQuery({query:query,model:this.mainobj.fmodelName});///5 ready query
                         return p;
                     }                    

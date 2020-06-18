@@ -125,10 +125,8 @@ export  class HttpService  implements Resolve<any>{
     }
     getSpecialPost(id:string){
     if(!this.posts[Number(id)]){
-      const options={
-        params:new HttpParams().set('id',id)
-      }
-      return this.http.get<PostsInterface>('http://localhost:8000/post/',options).pipe(
+      
+      return this.http.get<PostsInterface>(`http://localhost:8000/post/${id}`).pipe(
         tap((data)=>{
             if(data){
               if(!this.posts.find(el=>el.id==data.id)){

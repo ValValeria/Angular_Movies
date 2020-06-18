@@ -57,7 +57,6 @@ class BaseMainClass <T extends Models>  {
                     }else{
                         this.bel[confingD[elem.modelName].name]= new class_js(model,null,elem.modelName);
                     }
-                    console.log(this)
                     resolve(this)
                 }
            }
@@ -107,7 +106,13 @@ class BaseMainClass <T extends Models>  {
     }
     toJSON(){
         return Object.fromEntries( Object.entries(this).filter(([key,_value])=>{
-           return !key.startsWith('f') && !this.attr.includes(key) && key!='attr' && !this.forbidden.has(key)
+           let is_valid:boolean=true;
+           if(Array.isArray(_value)){
+               is_valid=Boolean(_value.length)
+           }else if(typeof _value=='object' && _value){
+               is_valid=Boolean(Object.keys(_value).length)
+           }
+           return !key.startsWith('f') && !this.attr.includes(key) && key!='attr' && !this.forbidden.has(key) && is_valid
         }))
     }
 }

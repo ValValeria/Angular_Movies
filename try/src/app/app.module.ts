@@ -13,10 +13,11 @@ import { HTTP_INTERCEPTORS } from '@angular/common/http';
 import { LoggingInterceptor } from './server/interceptor.service';
 import { Loading } from './comp/loading/loading.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { Move } from './directive/header.directive';
 
 @NgModule({
   declarations: [
-    AppComponent,Header,Loading
+    AppComponent,Header,Loading,Move
   ],
   imports: [
     BrowserModule,BrowserAnimationsModule,AppRoutingModule
