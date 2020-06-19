@@ -21,7 +21,7 @@ class Handle extends FileHandle{
     status_of_user(req:any,res:any,next?:any){
         this.set_cors_policy(res)
         .then(async ()=>{
-            return  await this.set_user(req,res)
+            return await this.set_user(req,res)
         })
         .then(()=>{
             if(next) next();
@@ -38,41 +38,32 @@ class Handle extends FileHandle{
         res.set("Access-Control-Allow-Credentials", "true" );
         return Promise.resolve()
     }
-   
 
     async posts(_req:any,resp:any,next?:any){
-        if(Store.exists({path:'posts'})){
-            return resp.json(Store.exists({path:'posts'}))
-        }else{
-            let posts =await new Post1().select({limit:3,belTo:[{key:'users',include_attr:['name','id_u']}]});///1-select rows
-            ///key-name of model
+             ///key-name of model
             ///include_attr-what attributes to include
-            ///attr-which attributes to exclude
-            Store.add({path:'posts'},posts)
-            return resp.json(posts)
-        }
+           ///attr-which attributes to exclude
+       return await this.make(resp,{path:'posts'},async()=>{return   new Post1().select({limit:3,belTo:[{key:'users',include_attr:['name','id_u']}]}); })
     }
-    async post(req:any,resp:any,next?:any){
+    async post(req:any,resp:any){
         let obj:Paths={path:'post',id:req.params.id};
-        let data=Store.exists({path:'post',id:req.params.id})
-        if(data){
-            return  resp.json(data[0])
-        }
-        let post=await new Post1().select({id:req.params.id});
-        Store.add(obj,post)
-        return resp.json(post[0])
+        return await  this.make(resp,obj,async()=>{return   new Post1().select({id:req.params.id})})
     }
-    async channels(_rq:any,resp:any,next:any){
-        let data=Store.exists({path:'channels'});
-        console.log()
-        if(data){
-            return resp.json(data);
-        }else{
-            let channel= await  U.select({attr:['password','email'],has:[{key:'posts',include_attr:['id','title','videoUrl']}]});
-            ///attr-which attributes to exclude
-            Store.add({path:'channels'},channel)
-            return resp.json(channel)
+    async channels(_rq:any,resp:any){
+        return await this.make(resp,{path:'channels'},async()=>{return   U.select({attr:['password','email'],has:[{key:'posts',include_attr:['id','title','videoUrl']}]})})
+    }
+    async make(res:any,obj:Paths,func:Function){
+        return new Promise(async(resolve)=>{
+            console.log('in make function')
+        let data = Store.exists(obj);
+        if(!data){
+            data= await func();
+            Store.add(obj,data)
         }
+        if(obj.path=="post") resolve(res.json(data[0]))
+        resolve(res.json(data))
+        })
+        
     }
     
 }

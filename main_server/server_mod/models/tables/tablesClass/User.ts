@@ -13,11 +13,11 @@ export  class User1 extends BaseMainClass<User> implements User {
     public fbelongsTo:ModelNames[]=[]
     public auth:boolean;
     public classname:string=`User1`
-    constructor(obj?:User,public fconfig?:Unique|null, attr?:user_t[],public loadedModel?:boolean){
+    constructor(obj:User={},public fconfig?:Unique|null, attr?:user_t[],public loadedModel?:boolean){
          super(obj,fconfig,User1.fmodelName,attr,loadedModel)  
     }
 }
 
-const nUser=new User1();
+const nUser=new User1({});
 
 export{nUser as U}

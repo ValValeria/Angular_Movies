@@ -2,7 +2,7 @@ import { Component,OnInit, IterableDiffers, ChangeDetectorRef, DefaultIterableDi
 import { HttpService } from '../server/http.service';
 import { POSTS, Post } from '../server/post.service';
 import { Observable } from 'rxjs';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router, RoutesRecognized } from '@angular/router';
 import { trigger, query, transition, style, group, animate, state } from '@angular/animations';
 
 
@@ -13,6 +13,11 @@ import { trigger, query, transition, style, group, animate, state } from '@angul
         selector:'my-main',
         templateUrl:'./main.component.html',
         styleUrls:['./main.component.css'],
+        animations:[
+            trigger('routeAnimation', [
+
+            ])
+        ]
         
     })
 export default class Main implements OnInit{
@@ -23,10 +28,11 @@ export default class Main implements OnInit{
     public differ : DefaultIterableDiffer<any>
     public isDisabled:boolean=true;
     constructor(private route: ActivatedRoute,private http:HttpService,private differs: IterableDiffers,
-        private changeDetector: ChangeDetectorRef,@Inject(POSTS) private stateEvents: Observable<Post>){ }
+        private changeDetector: ChangeDetectorRef,@Inject(POSTS) private stateEvents: Observable<Post>,private router:Router){ }
 
     ngOnInit(){
         this.differ=<DefaultIterableDiffer<any>>this.differs.find(this.http.posts).create()
+
         this.stateEvents.subscribe((elem)=>{
             if(!this.pages.find(el=>el.id==elem.id)){
                 this.pages.push(elem)
@@ -53,6 +59,10 @@ export default class Main implements OnInit{
     }
     ngAfterViewInit(){
         setTimeout(()=> this.isDisabled=false,0 )
+        this.router.events.subscribe((elem)=>{
+            if(elem instanceof RoutesRecognized){
+            }
+        })
     }
 
    

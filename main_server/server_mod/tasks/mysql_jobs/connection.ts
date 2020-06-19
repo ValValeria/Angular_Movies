@@ -2,7 +2,6 @@ import { Models, ModelNames } from "../../models/nameofmodels";
 
 import { User1,Post1} from "../../models/tables/Models";
 import { Statement, Unique, ResultSetHeader } from "../../interfaces/interfaces";
-import { BaseMainClass } from "../../models/tables/BaseMainClass";
 
 
 type main=keyof Models
@@ -20,7 +19,7 @@ namespace Con{
                 connectionLimit:1000000000000
             }).promise();
       }
-      async query(obj:Statement,content?:Models,loadMany:boolean=false):Promise<Models[]|null>{
+      async query(obj:Statement,content?:Models,loadMany:boolean=false):Promise<Models[]>{
          this.attr=obj.attr ||[]
        
          return  this.connection.query(obj.statement) 
@@ -41,9 +40,10 @@ namespace Con{
                    }
                    let decide=async (method:Function)=>{
                     if(isTrue && content) {
+                        console.log('in insert')
                         return   await method([{...content,id:(res[0] as ResultSetHeader).insertId}],{has:[],belTo:[]});
                     }else if(loadMany){/// send all data to a class. He will decide which property and where to store 
-                        console.log('i am1 ')
+                        console.log('in loadMany')
                         return await method(res,{has:[],belTo:[]},true)
                     }return  await method(res,{has:[],belTo:[]});
                     }
@@ -66,10 +66,10 @@ namespace Con{
       private async add(cl:any,ar:any[],obj:Unique,isLoaded:boolean=false){
         const promises=ar.map(async (elem)=>{
             if(isLoaded){
-                console.log('ok')
+                console.log('invoke the load_method')
                 return new cl(elem,obj,this.attr,true).load()
             }
-            return Promise.resolve(new cl(elem,obj,this.attr,isLoaded))
+            return Promise.resolve(new cl(elem,obj,this.attr,false))
          });
         return await Promise.all(promises);
       }

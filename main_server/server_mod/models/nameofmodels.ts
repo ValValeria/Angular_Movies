@@ -16,7 +16,8 @@ export const confingD:intr={
        otherFields:[],///ключи других моделей в таблице,
        fields:[{'name':'string'},{'email':'string'},{'password':"string"},{
            'id_u':'number'}],
-       mainkey:'id_u'    
+       mainkey:'id_u'    ,
+       has:[]
    },
    [ModelNames.Post]:{
        class:  'Post1',
@@ -24,7 +25,8 @@ export const confingD:intr={
        key:"postId",
        fields:[],
        otherFields:[],///ключи других моделей в таблице,
-       mainkey:'id'    
+       mainkey:'id',
+       has:[]    
 
    },
 

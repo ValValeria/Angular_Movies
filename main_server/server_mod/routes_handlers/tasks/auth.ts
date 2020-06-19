@@ -1,5 +1,5 @@
 import { Login, Res, User } from "../../interfaces/interfaces"
-import { U } from "../../models/tables/tablesClass/User"
+import { U, User1 } from "../../models/tables/tablesClass/User"
 
 export class AuthReq{
     protected response:Res={messages:[],status:'guest',errors:[]}
@@ -11,16 +11,15 @@ export class AuthReq{
             if(req.get('Authorization')){
                 const auth:User=JSON.parse(req.get('Authorization'))
                 if((auth as User).name){
-                 const user= await U.select({name:auth.name,and:true,email:auth.email})
+                 const user= await new User1({}).select({name:auth.name,and:true,email:auth.email})
                  if(user && user[0]){
                         this.response.status="user"   
                         this.user={...user[0],auth:true}
-                 }else{
-                     _reject();
+                        resolve(user)
                  }
-                }else resolve()
-            }else  resolve();
-           }else resolve()
+                }
+            }
+           }resolve(this.user)
         })
     }
     /**

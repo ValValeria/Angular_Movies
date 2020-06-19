@@ -1,4 +1,4 @@
-import { Component, ViewContainerRef, ComponentFactoryResolver, ViewChild, ChangeDetectorRef } from '@angular/core';
+import { Component, ViewContainerRef, ComponentFactoryResolver, ViewChild, ChangeDetectorRef, Input } from '@angular/core';
 import { Loading } from './comp/loading/loading.component';
 @Component({
   selector: 'app-root',
@@ -10,9 +10,8 @@ import { Loading } from './comp/loading/loading.component';
 export class AppComponent {
   public isdone:boolean=false;
   public time:number=Date.now()
-
   ngAfterViewInit() {
     setTimeout(()=>{this.isdone=true},4000)
   }
-
+ 
 }

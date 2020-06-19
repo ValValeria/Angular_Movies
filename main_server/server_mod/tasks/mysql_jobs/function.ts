@@ -1,7 +1,6 @@
 import MysqlConT from './connection'
 import { Models, confingD, ModelNames } from '../../models/nameofmodels'
-import { Mod, intr, Statement } from '../../interfaces/interfaces'
-import { nextTick } from 'process'
+import { Mod, s1 } from '../../interfaces/interfaces'
 
 namespace Act{
     export 
@@ -16,16 +15,16 @@ namespace Act{
                     'has','belTo','model','attr','limit','belongTo'
                 ])
            }
-           create(query: T & Mod ): Promise<Models[]> {
-               const fields=confingD[query.model].fields
+           create(query: T & Mod &{model:ModelNames} ): Promise<Models[]> {
+               const fields=confingD[query.model].fields  as s1[]
                const names:string[]=[]
                fields.forEach((elem:object,index:number)=>{
                   const types:[string,'string'|'number']=Object.entries(elem)[0];
                   if(query.hasOwnProperty(types[0])){
                       if(types[1]=='string'){
-                        this.query+=`"${Object.getOwnPropertyDescriptor(query,types[0]).value}",`
+                        this.query+=`"${query[types[0]]}",`
                       }else{
-                        this.query+=`${Object.getOwnPropertyDescriptor(query,types[0]).value},`
+                        this.query+=`${query[types[0]]},`
                       }
                       names.push(types[0])
                   }
@@ -40,22 +39,25 @@ namespace Act{
                return new MysqlConT().query({statement:this.query,model:query.model,has:[],belTo:[],attr:[]},cont)
 
             }
-            updateDependency(obj:T&Mod&{main_id:number}):Promise<any>{
+
+            updateDependency(obj:T&Mod&{main_id:number}&{model:string}):Promise<any>{
     
                 const {main_id,model,...rest}=obj
                 const entry=String.prototype.concat.call('',Object.keys(rest)[0],'=',Object.values(rest)[0])
                 this.query=`UPDATE ${model} SET ${entry} WHERE id=${main_id}`
                 return new MysqlConT().query({statement:this.query,model:model,has:[],belTo:[],attr:[],notloadModels:true})
+          
             }
+
             selectready(str:string,model:string):Promise<Models[]>{
                 return new MysqlConT().query({statement:this.query,model:model})
             }
-            select(obj:T&Mod,obj1?:any):Promise<Models[]>{
-               
+
+            async select(obj:T&Mod&{model:ModelNames}):Promise<Models[]>{
                this.query=`SELECT * FROM ${obj.model}`.concat(this.whereQueryReturn(obj))
-               
-               return new MysqlConT().query({statement:this.next(obj,this.query),model:obj.model,has:[],belTo:[],attr:[]}) 
+               return  new MysqlConT().query({statement:this.next(obj,this.query),model:obj.model,has:[],belTo:[],attr:[]}) 
             }
+
             next(obj:T&Mod,query:string){
              if(obj.limit){
                return query.concat(` limit ${obj.limit}`)
@@ -64,9 +66,9 @@ namespace Act{
             }
 
             async selectQuery(arg0: { query: string; model: ModelNames }) {
-                return new MysqlConT<T>().query({statement:arg0.query,model:arg0.model,has:[],belTo:[],attr:[]},null,true) 
+                return new MysqlConT<T>().query({statement:arg0.query,model:arg0.model,has:[],belTo:[],attr:[]},undefined,true) 
             }
-
+            
             whereQueryReturn(obj:Models&Mod):string{
                 const set=new Set(Object.entries(obj).filter(([x])=>!this.forbidden.has(x)))
     
@@ -75,7 +77,7 @@ namespace Act{
                         if(this.sql.includes(key)){
                             return ` ${key}  `
                         }else if(!this.forbidden.has(key)){
-                            const find= confingD[obj.model].fields.find((elem:{[prop:string]:string})=>{
+                            const find= confingD[obj.model as ModelNames].fields.find((elem:{[prop:string]:string})=>{
                                 return Object.keys(elem)[0]==key
                             })
                             if(find){
@@ -93,8 +95,7 @@ namespace Act{
                     }).join(" ")
                   return ` WHERE ${obj1}`
                 }
-                return ''
-               
+                return ''              
             }
                  
     }

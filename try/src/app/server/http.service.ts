@@ -63,7 +63,7 @@ export  class HttpService  implements Resolve<any>{
                )
     }
     
-    resolve_main_page(route: import("@angular/router").ActivatedRouteSnapshot, state: import("@angular/router").RouterStateSnapshot,ischannel=false){
+    resolve_main_page(_route: import("@angular/router").ActivatedRouteSnapshot, state: import("@angular/router").RouterStateSnapshot,ischannel=false){
       return this.http.get('http://localhost:8000/posts',{observe:'body',responseType:'json'}).pipe(retry(2),tap((success:any[])=>{
         success.forEach(elem=>{
           if(!this.posts.find(el=>el.id==elem.id)){
@@ -71,7 +71,7 @@ export  class HttpService  implements Resolve<any>{
           }
         })
       },
-      error=>this.router.navigateByUrl('/signup')
+      error=>{this.router.navigateByUrl('/signup');this.posts=[]}
       ))
     }
    

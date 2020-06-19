@@ -1,17 +1,22 @@
 import {Models, names, ModelNames, keys} from '../models/nameofmodels'
 export type f=keyof Models
 export type d={key:string,model:js,modelName:ModelNames}
+export type s=f&{[prop:string]:any};
+export type s1= {
+    [prop in s]:"number"|'string'
+}
+export type has={key:string,modelName:ModelNames,model:js}
 export interface js{
     class:any,
     name:string,
     key:string  ,
-    otherFields?:d[],
-    fields:{[prop in f&{[prop:string]:any}]:"number"|'string'}[],
-    has?:[{key:string,modelName:ModelNames,model:js}]
+    otherFields:d[],
+    fields:s1[],
+    has:[has]|[]
     mainkey:string
 }
 export interface Paths{
-    path:'channels'|'posts'|'post',
+    path:'channels'|'posts'|'post'|"USER_DATA",
     id?:number
 }
 export type intr = {

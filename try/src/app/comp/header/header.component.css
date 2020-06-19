@@ -12,6 +12,15 @@ header{
     padding-top:8px;
     color:white;
 }
+.gray{
+    background-color:white;
+    color: #313d4c !important;
+}
+.transp{
+    color:white;
+    background-color: transparent;
+}
+
 .my{
     max-width:1000px;
     margin:0 auto;
@@ -59,7 +68,5 @@ header ul li a {
     padding: 5px 35px;
     color: inherit !important;
 }
-.gray{
-    color: #313d4c !important;
-}
+
 

@@ -21,7 +21,7 @@ import { HttpService } from './server/http.service';
 import { Channel } from './Channel/channel.component';
 
 const routes:Routes=[
-  {path:'',component:Main,resolve:{posts:HttpService}},
+  {path:'',component:Main,resolve:{posts:HttpService},data:{animation:"firstPage"}},
   {path:'posts/:id',component:MainPost,resolve:{post:HttpService}},
   {path:'signup',component:SignUp},
   {path:'addapost',component:CreatePost,canActivate:[AuthGuard]},

@@ -1,40 +1,32 @@
-import { Directive, ElementRef, Renderer2 } from '@angular/core';
+import { Directive, ElementRef, Renderer2, HostBinding } from '@angular/core';
 import { fromEvent } from 'rxjs/internal/observable/fromEvent';
-import { ActivatedRoute, UrlSegment, Router } from '@angular/router';
-import { switchMap } from 'rxjs/internal/operators/switchMap';
-import { of } from 'rxjs/internal/observable/of';
-import { from } from 'rxjs/internal/observable/from';
+import { Router, RoutesRecognized, NavigationStart } from '@angular/router';
+
 
 @Directive({
-    selector:'[makemove]'
+    selector:'[makemove]',
+    exportAs:"head"
 })
 export class Move{
-    public parent:HTMLElement
-    constructor(public element:ElementRef,public renderer: Renderer2 ,private router:Router){
-      this.parent=this.renderer.parentNode(this.element.nativeElement);
-    }
+    @HostBinding('class') class:string
+    constructor(public element:ElementRef,public renderer: Renderer2,private route:Router ){  }
+
     ngOnInit(){
-        this.renderer.addClass(this.parent,'gray')  
-        this.renderer.setStyle(this.parent,'background','white')
-        
+        this.set_fun(document.documentElement.scrollTop)
         fromEvent(window,'scroll')
         .subscribe(()=>{
             const scrollTop=document.documentElement.scrollTop;
             this.set_fun(scrollTop);
         })
+        this.route.events.subscribe((event)=>{
+            if(event instanceof RoutesRecognized || event instanceof NavigationStart){
+                this.set_fun(document.documentElement.scrollTop)
+            }
+        })
     }
     public set_fun(number:number){
-          if(this.router.url=="/"){
-            if(number<100 ){
-                this.renderer.setStyle(this.parent,'background-color','transparent')
-                this.renderer.removeClass(this.parent,'gray')
-
-            }else{
-                this.renderer.removeStyle(this.parent,'background-color')
-                this.renderer.addClass(this.parent,'gray')
-            }
-
-          }
+          if(location.pathname=="/" && number<100)    this.class="transp";
+          else this.class="gray";
     }
     
 }

@@ -40,14 +40,14 @@ app.post('/status_of_user',(_req:any,res:any,_next:any)=>{
 })
 
 app.get('/channels',(_req:any,res:any,_next:any)=>{
-    c(newH.channels(_req,res,_next),res);
+    c(newH.channels(_req,res),res);
 })
 
 app.get('/posts',(req:any,res:any,next:any)=>{
     c(newH.posts(req,res,next),res)
 })
 app.get('/post/:id',(req:any,res:any,next:any)=>{
-    c(newH.post(req,res,next),res)
+    c(newH.post(req,res),res)
  })
  app.listen(8000,()=>{
     console.log('app is running')

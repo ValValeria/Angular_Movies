@@ -3,6 +3,7 @@ import fs from 'fs';
 import { AuthReq } from './auth';
 import { Res, User, Post } from '../../interfaces/interfaces';
 import { P } from '../../models/tables/tablesClass/Post';
+import { Models } from '../../models/nameofmodels';
 
 
 export abstract class FileHandle extends AuthReq{
@@ -25,7 +26,7 @@ export abstract class FileHandle extends AuthReq{
            if(req.file.mimetype==="video/mp4" && this.user.auth && req.file.size<59191200){
 
               const post= await P.create(Object.assign({},{...req.body},{videoUrl:req.file.path}))
-              if(post[0]) await post[0].addBelTo(this.user)
+              if(post[0]) await (post[0] as Models &{addBelTo:Function}).addBelTo(this.user)
               this.response.status='Added';
               this.response.id=post[0].id
            }else{
