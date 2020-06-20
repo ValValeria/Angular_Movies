@@ -19,10 +19,12 @@ import { HttpClientModule } from '@angular/common/http';
 import { FormDirective } from './directive/form.directive';
 import { HttpService } from './server/http.service';
 import { Channel } from './Channel/channel.component';
+import { Banner_Animation } from './comp/banner/banner.component';
+import { Comments } from './comp/comments/comments.component';
 
 const routes:Routes=[
-  {path:'',component:Main,resolve:{posts:HttpService},data:{animation:"firstPage"}},
-  {path:'posts/:id',component:MainPost,resolve:{post:HttpService}},
+  {path:'',component:Main,resolve:{posts:HttpService}},
+  {path:'post/:id',component:MainPost,resolve:{post:HttpService}},
   {path:'signup',component:SignUp},
   {path:'addapost',component:CreatePost,canActivate:[AuthGuard]},
   {path:'channels',component:Channel,resolve:{channels:HttpService},children:[
@@ -36,7 +38,7 @@ const routes:Routes=[
   imports: [RouterModule.forRoot(routes),ReactiveFormsModule,CommonModule,  FormsModule,
     HttpClientModule],
   exports: [RouterModule],
-  declarations:[CreatePost,FormPost,Video,SignUp,ChildComponent,Main,Card,MainPost,Scale,SignUp,Cut,FormDirective],
+  declarations:[Comments,Banner_Animation,CreatePost,FormPost,Video,SignUp,ChildComponent,Main,Card,MainPost,Scale,SignUp,Cut,FormDirective],
   providers:[Cut]
 })
 export class AppRoutingModule { }

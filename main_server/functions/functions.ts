@@ -1,3 +1,3 @@
 export function c(promise:Promise<any>,res:{status:Function}):Promise<any>{
-     return promise.catch(err=>{res.status(500);console.log(err)})
+     return promise.catch(err=>{console.log(err)})
 }

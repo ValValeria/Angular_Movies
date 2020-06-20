@@ -5,7 +5,6 @@ import { Router, RoutesRecognized, NavigationStart } from '@angular/router';
 
 @Directive({
     selector:'[makemove]',
-    exportAs:"head"
 })
 export class Move{
     @HostBinding('class') class:string
@@ -25,8 +24,10 @@ export class Move{
         })
     }
     public set_fun(number:number){
-          if(location.pathname=="/" && number<100)    this.class="transp";
-          else this.class="gray";
+        setTimeout(()=>{
+            if(location.pathname=="/" && number<100)    this.class="transp";
+            else this.class="gray";
+        },0)
     }
     
 }

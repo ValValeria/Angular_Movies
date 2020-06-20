@@ -26,10 +26,10 @@ class Handle extends FileHandle{
         .then(()=>{
             if(next) next();
         })
-        .catch(()=>res.status(500))
     }
     userdata():Res{
-        return this.response;
+        const response:Res={messages:[],status:this.user.auth?"user":"guest",errors:[]}
+        return response;
     }
     async set_cors_policy(res:any){
         res.set("Access-Control-Allow-Origin", "*");
@@ -60,8 +60,10 @@ class Handle extends FileHandle{
             data= await func();
             Store.add(obj,data)
         }
-        if(obj.path=="post") resolve(res.json(data[0]))
-        resolve(res.json(data))
+        if(obj.path=="post") resolve(res.send(JSON.stringify(data[0])))
+        console.log('i am in end of make()')
+        resolve(res.send(JSON.stringify(data)));
+        console.log('i am in end of make()')
         })
         
     }

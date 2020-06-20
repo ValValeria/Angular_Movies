@@ -24,3 +24,29 @@
     min-width:300px;
     text-align:center;
 }
+.code-example{
+        /* width: 100%; */
+        box-shadow: none;
+        color: #fff;
+        margin-top: 0;
+        background-color: transparent;
+        border-radius: 0;
+        font-size: 13px;
+        text-transform: uppercase;
+        padding: 18px 20px 17px;
+        display: inline-block;
+        border-radius: 4px;
+        line-height: 1;
+        font-weight: 500;
+        margin-top: 20px;
+        align-self:flex-start;
+        margin-left:10%;
+        max-width:100px;
+        border-bottom: rgba(255,255,255,.2) solid 1px;
+        box-shadow: 0 2px 6px rgba(0,0,0,.14);
+        color: rgb(45, 45, 45);
+        display: inline-block;
+}
+.main_post_content{
+    padding-top:100px;
+}

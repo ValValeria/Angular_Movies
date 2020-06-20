@@ -1,8 +1,9 @@
-import { Component ,Input} from '@angular/core';
+import { Component ,Input, ViewEncapsulation} from '@angular/core';
 @Component({
     templateUrl:'./card.component.html',
     selector:'card',
-    styleUrls:['./card.component.css']
+    styleUrls:['./card.component.css'],
+    encapsulation:ViewEncapsulation.None
 })
 export class Card{
    @Input() title:string;

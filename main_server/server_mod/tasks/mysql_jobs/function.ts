@@ -1,6 +1,7 @@
 import MysqlConT from './connection'
 import { Models, confingD, ModelNames } from '../../models/nameofmodels'
-import { Mod, s1 } from '../../interfaces/interfaces'
+import { Mod, s1, rules_type } from '../../interfaces/interfaces'
+import { validation } from '../validation/models.validation'
 
 namespace Act{
     export 
@@ -20,6 +21,20 @@ namespace Act{
                const names:string[]=[]
                fields.forEach((elem:object,index:number)=>{
                   const types:[string,'string'|'number']=Object.entries(elem)[0];
+                  
+                  /*
+                             * Find out if the data is invalid
+                  */
+                  const validators=confingD[query.model as ModelNames].validators.filter((elem)=>{
+                        return types[0]==(Object.values(elem)[0] as string)
+                  })
+                  if(validators.length){
+                       validators.forEach(elem=>{
+                         const [prop]=Object.entries(elem)[0];
+                         validation.isAcceptable(prop as rules_type,query[types[0]])
+                      })
+                  }
+                 /** end validation */
                   if(query.hasOwnProperty(types[0])){
                       if(types[1]=='string'){
                         this.query+=`"${query[types[0]]}",`
@@ -37,7 +52,6 @@ namespace Act{
                let cont=Object.fromEntries(Object.entries(query).filter(([key])=>!this.forbidden.has(key)))
                console.log(this.query)
                return new MysqlConT().query({statement:this.query,model:query.model,has:[],belTo:[],attr:[]},cont)
-
             }
 
             updateDependency(obj:T&Mod&{main_id:number}&{model:string}):Promise<any>{
@@ -77,6 +91,7 @@ namespace Act{
                         if(this.sql.includes(key)){
                             return ` ${key}  `
                         }else if(!this.forbidden.has(key)){
+                            
                             const find= confingD[obj.model as ModelNames].fields.find((elem:{[prop:string]:string})=>{
                                 return Object.keys(elem)[0]==key
                             })

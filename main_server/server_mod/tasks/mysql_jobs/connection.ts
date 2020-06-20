@@ -66,10 +66,9 @@ namespace Con{
       private async add(cl:any,ar:any[],obj:Unique,isLoaded:boolean=false){
         const promises=ar.map(async (elem)=>{
             if(isLoaded){
-                console.log('invoke the load_method')
-                return new cl(elem,obj,this.attr,true).load()
+                return new cl(elem,obj,this.attr,true).load().catch(error=>[])
             }
-            return Promise.resolve(new cl(elem,obj,this.attr,false))
+            return Promise.resolve(new cl(elem,obj,this.attr,false)).catch(error=>[])
          });
         return await Promise.all(promises);
       }

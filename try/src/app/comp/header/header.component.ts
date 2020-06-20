@@ -11,7 +11,6 @@ import { Move } from 'src/app/directive/header.directive';
 export class Header {
     isLogged:boolean;
     public class:string="my"
-
     constructor(private http:HttpService ,@Inject(STATUS_USER) public status_user:Observable<any>,private differs: IterableDiffers){
       this.isLogged=this.http.isLogged;
       status_user.subscribe((f)=>{

@@ -48,7 +48,9 @@ export class AuthReq{
             }
             return Promise.resolve();
         })
-        .catch((_error)=>console.log(_error))
+        .catch((_error)=>{
+            this.response.errors.push(_error.message)
+        })
         .finally(()=>{
             console.log(this.response)
             resp.json(this.response)

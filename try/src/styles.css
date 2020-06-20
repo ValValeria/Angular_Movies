@@ -19,22 +19,20 @@
 body:first-child{
   padding-top:150px ;
 }
-.sec::after{
+.after_sec{
   background-image: url(https://d1o6pphsuqk08k.cloudfront.net/assets/img/svg/landing/orange-cloud.svg);
   content:"";
   display:block;
   position:absolute;
-  width:100%;
+  width:130%;
   height:100%;
   top:96px;
   left:0;
-  max-height:85%;
-  z-index:-1;
-  background-size:20%;
+  max-height:87%;
+  background-size:300px;
 }
 body{
     min-height:100vh;
-    padding:5%;
     padding-top:0 !important;
   /*  font-family: 'Baloo 2', cursive;
   /*  font-family: 'Open Sans', sans-serif;*/
@@ -115,8 +113,8 @@ a,a:focus{
     text-align: center;
     width: 100vw;
     min-height:100vh;
-    transform: translate(-5%,0);
     background-image: linear-gradient(to bottom right,#fd545d 0,#ffb435 100%);
+    overflow: hidden;
     position:relative;
     display:flex;
     align-items:center;

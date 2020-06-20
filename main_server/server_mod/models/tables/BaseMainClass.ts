@@ -2,6 +2,7 @@ import { Models, ModelNames, confingD} from "../nameofmodels";
 import Action from "../../tasks/mysql_jobs/function";
 import {Dependency,Mod, js, Unique, d, f} from '../../interfaces/interfaces'
 import { LoadModels } from "./loadModels/loadModels";
+import { validation } from "../../tasks/validation/models.validation";
 
 class BaseMainClass <T extends Models>  {
 
@@ -98,7 +99,7 @@ class BaseMainClass <T extends Models>  {
     
     create(obj:T):Promise<Models[]>{
         const query: T &Mod&{model:ModelNames}={...obj,model:this.fmodelName as ModelNames}
-        return new Action<T>().create(query)
+        return new Action<T>().create(query);
     }
     addBelTo(obj:Models&{id:number}):Promise<any>|never{//?
         return  new LoadModels.Load(this,obj).addBelTo(obj)
