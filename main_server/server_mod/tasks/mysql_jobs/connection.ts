@@ -13,9 +13,9 @@ namespace Con{
             this.connection=require('mysql2').createPool({
                 host: "remotemysql.com",
                 port:3306,
-                password:"Eu6f3raCnq",
-                database:"C5CTjjXhqo",
-                user:"C5CTjjXhqo",
+                password:"***********",
+                database:"*********",
+                user:"********",
                 connectionLimit:1000000000000
             }).promise();
       }
