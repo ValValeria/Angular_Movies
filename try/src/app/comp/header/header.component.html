@@ -1,12 +1,13 @@
-<header makemove>
+<header makemove #directive="move">
    <div class="my">
     <h1>VideoFree</h1>
-    <ul>
-     <li><a routerLink="" routerLinkActive="active"   [routerLinkActiveOptions]="{exact:true}">Home</a></li>
-     <li><a routerLink="/channels" routerLinkActive="active"  >Channels</a></li>
-     <li *ngIf="!isLogged"><a routerLink="/login" routerLinkActive="active"   >Login</a></li>
-     <li *ngIf="!isLogged"><a routerLink="/signup" routerLinkActive="active"   >SignUp</a></li>
-     <li *ngIf="isLogged"><a routerLink="/addapost" routerLinkActive="active"  >Add a post</a></li>
+    <ul #ul>
+     <li><a routerLink=""    routerLinkActive="active"
+     [routerLinkActiveOptions]="{exact:true}">Home</a></li>
+     <li><a routerLink="/channels" >Channels</a></li>
+     <li *ngIf="!isLogged"><a routerLink="/login"  routerLinkActive="active">Login</a></li>
+     <li *ngIf="!isLogged"><a routerLink="/signup"  routerLinkActive="active" >SignUp</a></li>
+     <li *ngIf="isLogged"><a routerLink="/addapost" routerLinkActive="active" >Add a post</a></li>
     </ul>
    </div>
 </header>

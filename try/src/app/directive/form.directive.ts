@@ -31,7 +31,8 @@ export class FormDirective{
 
 
     ngOnInit(){
-        this.formGroup.statusChanges.subscribe(()=>{
+        this.formGroup.valueChanges.subscribe(()=>{
+            console.log('typing')
             this.container.clear()
             if(this.formGroup.valid){
                let int=Math.round(89.5+Math.random()*90) 
@@ -49,6 +50,7 @@ export class FormDirective{
         if(obj.errors){
             let messages:string[]=[]
             for(let prop in obj.errors){
+                console.log(obj.errors)
                 switch(prop){
                     case "required":
                         messages.push(`Одно из полей пустое`)

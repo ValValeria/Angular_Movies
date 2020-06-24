@@ -12,6 +12,14 @@ header{
     padding-top:8px;
     color:white;
 }
+.active_white{
+    border-bottom: 1px solid white;
+    color:white;
+}
+.active_gray{
+    color: #313d4c !important;
+    border-bottom: 1px solid #313d4c;
+}
 .gray{
     background-color:white;
     color: #313d4c !important;

@@ -3,7 +3,6 @@ import { Component ,Input, ViewEncapsulation} from '@angular/core';
     templateUrl:'./card.component.html',
     selector:'card',
     styleUrls:['./card.component.css'],
-    encapsulation:ViewEncapsulation.None
 })
 export class Card{
    @Input() title:string;

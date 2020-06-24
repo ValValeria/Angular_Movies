@@ -1,65 +1,54 @@
 import MysqlConT from './connection'
 import { Models, confingD, ModelNames } from '../../models/nameofmodels'
 import { Mod, s1, rules_type } from '../../interfaces/interfaces'
-import { validation } from '../validation/models.validation'
+import { EventEmitter } from 'events'
+import {  CONSTRUCT_QUERY_MYSQL, VALIDATE_COL } from '../../events_constants/events.contants'
+import { QueryContruct } from './validate'
 
 namespace Act{
     export 
-     class Action <T extends Models>{
+     class Action <T extends Models> extends QueryContruct{
         
-           private query:string
+           protected query:string
            public forbidden:Set<string>
-           private readonly sql:string[]=["and","or"]
+           private readonly sql:string[]=["and","or"];
+           protected eventEmmitter:EventEmitter=new EventEmitter();
+           protected names:string[]
            constructor(){
+                super()
                 this.query=""
                 this.forbidden=new Set([
                     'has','belTo','model','attr','limit','belongTo'
                 ])
+                this.names=[]
+                this.eventEmmitter.prependListener(VALIDATE_COL,this.validate.bind(this))
            }
+         
+          
            create(query: T & Mod &{model:ModelNames} ): Promise<Models[]> {
                const fields=confingD[query.model].fields  as s1[]
-               const names:string[]=[]
+               const names=[]
                fields.forEach((elem:object,index:number)=>{
                   const types:[string,'string'|'number']=Object.entries(elem)[0];
-                  
-                  /*
-                             * Find out if the data is invalid
-                  */
-                  const validators=confingD[query.model as ModelNames].validators.filter((elem)=>{
-                        return types[0]==(Object.values(elem)[0] as string)
-                  })
-                  if(validators.length){
-                       validators.forEach(elem=>{
-                         const [prop]=Object.entries(elem)[0];
-                         validation.isAcceptable(prop as rules_type,query[types[0]])
-                      })
-                  }
-                 /** end validation */
-                  if(query.hasOwnProperty(types[0])){
-                      if(types[1]=='string'){
-                        this.query+=`"${query[types[0]]}",`
-                      }else{
-                        this.query+=`${query[types[0]]},`
-                      }
-                      names.push(types[0])
-                  }
+                  this.eventEmmitter.emit(VALIDATE_COL,query,types[0],types[1])
+                  this.construct_query_mysql(query,types[0],types[1]);
                   if(index==fields.length-1){
                       this.query=this.query.slice(0,this.query.lastIndexOf(',')).concat(')')
                   }
-                
                })
-               this.query=`INSERT INTO ${query.model}(${[...names]}) VALUES(`.concat(this.query)
+               this.query=`INSERT INTO ${query.model}(${[...this.names]}) VALUES(`.concat(this.query)
                let cont=Object.fromEntries(Object.entries(query).filter(([key])=>!this.forbidden.has(key)))
                console.log(this.query)
                return new MysqlConT().query({statement:this.query,model:query.model,has:[],belTo:[],attr:[]},cont)
             }
 
-            updateDependency(obj:T&Mod&{main_id:number}&{model:string}):Promise<any>{
+            updateDependency(obj:T&Mod&{main_id:[string,number]}&{model:string}):Promise<any>{
     
                 const {main_id,model,...rest}=obj
-                const entry=String.prototype.concat.call('',Object.keys(rest)[0],'=',Object.values(rest)[0])
-                this.query=`UPDATE ${model} SET ${entry} WHERE id=${main_id}`
-                return new MysqlConT().query({statement:this.query,model:model,has:[],belTo:[],attr:[],notloadModels:true})
+                const entry=''.concat.call('',Object.keys(rest)[0],'=',Object.values(rest)[0])
+                let query=`UPDATE ${model} SET ${entry} WHERE ${main_id[0]}=${main_id[1]}`
+                console.log(query)
+                return new MysqlConT().query({statement:query,model:model,has:[],belTo:[],attr:[],notloadModels:true})
           
             }
 
@@ -79,8 +68,8 @@ namespace Act{
              return query
             }
 
-            async selectQuery(arg0: { query: string; model: ModelNames }) {
-                return new MysqlConT<T>().query({statement:arg0.query,model:arg0.model,has:[],belTo:[],attr:[]},undefined,true) 
+            async selectQuery(arg0: { query: string; model: ModelNames },loadMany:boolean=true,content?:any) {
+                return new MysqlConT<T>().query({statement:arg0.query,model:arg0.model,has:[],belTo:[],attr:[]},undefined,loadMany,content) 
             }
             
             whereQueryReturn(obj:Models&Mod):string{
@@ -91,7 +80,6 @@ namespace Act{
                         if(this.sql.includes(key)){
                             return ` ${key}  `
                         }else if(!this.forbidden.has(key)){
-                            
                             const find= confingD[obj.model as ModelNames].fields.find((elem:{[prop:string]:string})=>{
                                 return Object.keys(elem)[0]==key
                             })
@@ -99,12 +87,10 @@ namespace Act{
                                   const find1=Object.values(find)[0]
                                   switch(find1){
                                       case "string":
-                                         return ` ${key} = "${value}"`;
+                                         return ` ${obj.model}.${key} = "${value}"`;
                                       case "number":
-                                         return ` ${key} = ${value}`
+                                         return ` ${obj.model}.${key} = ${value}`
                                   }
-                            }else{
-                                throw new Error('In function.ts keys error');
                             }
                         }
                     }).join(" ")

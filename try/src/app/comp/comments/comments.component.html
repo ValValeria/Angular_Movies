@@ -1,5 +1,5 @@
 <div class="comments">
-     <div>
+     <div class="max_width_800">
         <h1 class="title">Comments</h1>
         <div class="mycard">
             <div class="card-text-container">
@@ -7,13 +7,40 @@
                      
                 </div>
                 <div>
-                    <textarea name="" id="" cols="30" rows="10"></textarea>
+                    <textarea  cols="30" rows="10" #textarea></textarea>
                 </div>
                 <div>
-                    <button class="submit" type="submit">Send a comment</button>
-                    
+                    <button class="submit" (click)="click($event)">Send a comment</button>
+
                 </div>
             </div>
+        </div>
+        <div>
+            <br/>
+            <h5 class="other_comments_h4">Other comments</h5>
+         
+
+            <ng-container #views></ng-container>
+
+            <ng-template let-message="message" let-name="name"#tpl>
+                 <div class="message_area">
+                    <div class="no_comments">
+                        <div class="author_name">
+                            <h5>{{name}}</h5>
+                        </div>
+                        <div class="author_comment">
+                            {{message}}
+                        </div>
+                    </div>
+                 </div>
+         
+            </ng-template>
+
+            <ng-template [ngIf]="!comments_exists">
+                 <div class="no_comments">
+                     <p>There are no comments</p>
+                 </div>
+            </ng-template>
         </div>
      </div>
 </div>

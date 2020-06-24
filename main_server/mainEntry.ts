@@ -1,8 +1,7 @@
 import { newH } from "./server_mod/routes_handlers/handle";
 import { c } from "./functions/functions";
 import path from 'path'
-
-const express = require('express')
+import express from 'express'
 
 const app=express();
 const bodyparser=require('body-parser');
@@ -49,7 +48,11 @@ app.get('/posts',(req:any,res:any,next:any)=>{
 app.get('/post/:id',(req:any,res:any,next:any)=>{
     c(newH.post(req,res),res)
  })
- app.listen(8000,()=>{
+
+app.post('/addcomments',(req:any,res:any,next:Function)=>{
+    c(newH.addComment(req,res),res)
+})
+app.listen(8000,()=>{
     console.log('app is running')
 })
 

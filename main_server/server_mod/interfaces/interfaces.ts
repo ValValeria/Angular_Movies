@@ -7,7 +7,8 @@ export type s1= {
 }
 
 export interface Rules{
-    letters:`/^[A-Za-z]+$/`
+    letters:`/^[A-Za-z]+$/`;
+    email:(value:string)=>boolean;
 }
 export type rules_type=keyof  Rules;
 
@@ -20,10 +21,10 @@ export interface js{
     fields:s1[],
     has:[has]|[]
     mainkey:string,
-    validators:{[prop in rules_type]:string}[]
+    validators:{[prop in Partial<rules_type>&{email?:any}]:string}[]
 }
 export interface Paths{
-    path:'channels'|'posts'|'post'|"USER_DATA",
+    path:'channels'|'posts'|'post'|"USER_DATA"|"comments",
     id?:number
 }
 export type intr = {
@@ -99,5 +100,16 @@ export interface Statement extends Unique{
     model:string,
     attr?:f[] ///which attributes to exclude,
     notloadModels?:boolean
+}
+
+/**
+ * 
+ */
+export interface Comments{
+    id_c?:number;
+    sender?:number;
+    receiver?:number|null;
+    message?:string;
+    postId?:number
 }
 

@@ -1,10 +1,11 @@
 import {Injectable, Inject} from '@angular/core'
 import {HttpClient, HttpHeaders, HttpResponse, HttpParams} from '@angular/common/http'
-import { Observable, Observer, from, of } from 'rxjs';
+import { Observable, Observer, from, of, Subject } from 'rxjs';
 import { catchError, retry, tap, take,mergeMap } from 'rxjs/operators';
-import {User,StatusOfPost,PostsInterface} from './interface.service'
+import {User,StatusOfPost,PostsInterface, Comments, Res} from './interface.service'
 import { POSTS, Post ,STATUS_USER} from './post.service';
 import { Router, Resolve } from '@angular/router';
+import { getCookie } from '../functions.server';
 
 
 
@@ -12,23 +13,44 @@ import { Router, Resolve } from '@angular/router';
   providedIn:'root'
 })
 export  class HttpService  implements Resolve<any>{
-    dataUser:User={status:'guest',email:null,name:''}
+    dataUser:User={status:'guest',email:'',name:''}
 
-    Users:{name:string,post:any[]}[]=[]
+    Users:{name:string,post:any[]}[]=[]///for channel page
 
     isLogged:boolean=false;
-    posts:any[]=[];
-    user: any;
-    static counter=0;
+    posts:any[]; ///for post pages
+  
+
+    public comments$=new Subject<{url:string,comment:Comments,id:number}>()
+    public commentsMap:Map<string,Comments[]>=new Map();
+
     constructor(private http:HttpClient,@Inject(POSTS) private stateEvents: Observable<Post>, private router: Router,@Inject(STATUS_USER) private status:Observer<any>){
-           
+      this.posts=[]
       this.stateEvents.subscribe((data)=>{
            this.posts.push(data)
       } 
       )
+      
+      this.comments$.asObservable().subscribe((elem:{url:string,comment:Comments,id:number})=>{
+          this.addComment(elem)
+      })
       this.statusOfUser(this.status);
     }
-   
+    
+    addComment(obj){
+      const httpOptions = {
+        headers: new HttpHeaders({
+          'Content-Type':  'application/json',
+        })
+      };
+      return this.http.post<Res>('http://localhost:8000/addcomments',JSON.stringify(obj),httpOptions)
+             .subscribe((resp)=>{
+               if(resp.status=="Added"){
+                this.commentsMap.set(obj.url, (this.commentsMap.get(obj.url)||[]).concat(obj.comment));   
+               }
+             })
+    }
+    
     
    resolve(route: import("@angular/router").ActivatedRouteSnapshot, state: import("@angular/router").RouterStateSnapshot) {
         if(state.url=="/"){
@@ -95,7 +117,9 @@ export  class HttpService  implements Resolve<any>{
     }
 
 
-
+    checkUser(obj:any):obj is User{
+        return obj.name!=undefined && obj.email!=undefined
+    }
     statusOfUser(status){
 
       if(localStorage.getItem('auth')){
@@ -106,10 +130,16 @@ export  class HttpService  implements Resolve<any>{
              _error=>this.isLogged=false
            )
           )
-         .subscribe(function(data:{status:string}){
+         .subscribe((data:{status:string})=>{
             if(data.status=="user"){
                this.isLogged=true;
-               status.next(true)
+               const maybe_user=JSON.parse(getCookie('auth'))
+               if(this.checkUser(maybe_user)){
+                status.next(true)
+                this.dataUser.name=maybe_user.name;
+                this.dataUser.email=maybe_user.email
+                console.log(this.dataUser)
+               }
             }else{
                this.isLogged=false;
             }

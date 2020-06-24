@@ -2,6 +2,7 @@ import { Component, ElementRef, ViewChild, TemplateRef, ViewContainerRef, Compon
 import {Video} from '../video/Video.component'
 import { FormControl,FormGroup, Validators } from '@angular/forms';
 import { HttpService } from 'src/app/server/http.service';
+import { forbiddenextension } from 'src/app/validators/validators';
 
 @Component({
     selector:'form-create',
@@ -19,9 +20,12 @@ export class FormPost{
     visible:boolean=false
     isValidVideo:boolean=false;
     videoUrl:string
-    constructor(private comp:ComponentFactoryResolver,private http:HttpService){ }
-     
-    ngOnInit(){
+    validators:any[]=new Array()
+    constructor(private comp:ComponentFactoryResolver){ 
+          this.return_form([])
+    }
+    
+    return_form(validators){
         this.form=new FormGroup({
             'name':new FormControl('',[
                 Validators.required,
@@ -34,31 +38,38 @@ export class FormPost{
                 Validators.minLength(5),
                 Validators.maxLength(300)
             ]),
-            'videoUrl':new FormControl('',[
-                Validators.required
-            ])
+            'videoUrl':new FormControl('',validators)
          })
+    }
+     
+    ngAfterViewInit(){
+        setTimeout(()=>{
+            this.return_form([
+                Validators.required,
+                forbiddenextension(this.file.nativeElement)
+            ])
+        },0)
     }
     click($event:any){
      $event.preventDefault()
      this.file.nativeElement.click()
     }
     changeFiles(){
-     console.log(this.form.errors)
-     let file=this.file.nativeElement.files[0];
-     if(file.type.startsWith('video/') && file.size<59191204){
-      this.isValidVideo=true;   
-      this.view.clear();
-      let item=this.comp.resolveComponentFactory(Video);
-      let  itemRef=this.view.createComponent(item);
-
-      let filereader=new FileReader();
-      filereader.readAsDataURL(file);
-      let url=this.videoUrl=URL.createObjectURL(file);
-      
-      (<Video>itemRef.instance).type=file.type    
-      document.querySelector('#source').setAttribute('src',url)
-    }
+      if(this.form.valid){
+        let file=this.file.nativeElement.files[0];
+        this.isValidVideo=true;   
+        this.view.clear();
+        let item=this.comp.resolveComponentFactory(Video);
+        let  itemRef=this.view.createComponent(item);
+  
+        let filereader=new FileReader();
+        filereader.readAsDataURL(file);
+        let url=this.videoUrl=URL.createObjectURL(file);
+        
+        (<Video>itemRef.instance).type=file.type    
+        document.querySelector('#source').setAttribute('src',url)
+      }
+     
     }    
  
 }

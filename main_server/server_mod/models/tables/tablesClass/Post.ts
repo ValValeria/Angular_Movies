@@ -12,8 +12,9 @@ export class Post1  extends BaseMainClass<Post> implements Post{
     fhasMany:ModelNames[]=[]
     fbelongsTo:ModelNames[]=[ModelNames.User]
     classname:string=`Post1`
-    constructor(obj:Post={},public fconfig?:Unique|null, attr?:post_t[],public loadedModel?:boolean){
-        super(obj,fconfig,Post1.fmodelName,attr,loadedModel)
+    static classname1:string=`Post1`
+    constructor(obj:Post={},public fconfig:Unique={}, attr:post_t[]=[],public loadedModel:boolean=false){
+        super(obj,fconfig,Post1.fmodelName,attr,loadedModel,Post1.classname1)
     }
 }
 const newPost=new Post1({});

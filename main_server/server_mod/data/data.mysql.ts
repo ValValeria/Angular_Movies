@@ -10,14 +10,13 @@ namespace DataMysql{
         exists(key:Paths){
             let mykey=JSON.stringify(key);
             if(this.obj.has(mykey)) { 
-                console.log('exists')
                 return this.obj.get(mykey) 
             } 
             return false;   
         }
-        add(key:Paths,value:any){
+        add(key:Paths,value:any[]){
             let mykey=JSON.stringify(key);
-            if(!this.exists(key)){
+            if(!this.exists(key) && value.length){
                 this.obj.set(mykey,value)
             }
         }

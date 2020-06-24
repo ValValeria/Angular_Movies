@@ -32,6 +32,7 @@ body:first-child{
   background-size:300px;
 }
 body{
+    width:100vw;
     min-height:100vh;
     padding-top:0 !important;
   /*  font-family: 'Baloo 2', cursive;
@@ -199,6 +200,8 @@ box-shadow: 0 20px 32px rgba(0,0,0,.2);
                 -13px -13px 20px #ffffff;
     margin:10px auto;
     margin-bottom:50px;
+    color: #313d4c !important;
+  
   }
   .title {
     text-align: center;
