@@ -1,0 +1,33 @@
+<div class="admin__area">
+    <div class="admin__wrap">
+        <div  class="admin__info__row">
+            <h4> Your profile</h4>
+        </div>
+        <div class="admin__info__row">
+             <div class="admin__info__row__author">
+              <mat-card>
+                <mat-card-title-group>
+                    <mat-card-title>{{email}}	</mat-card-title>
+                    <img src="https://images.unsplash.com/photo-1511367461989-f85a21fda167?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=889&q=80" class='admin__info__row__author__image' mat-card-avatar>	
+                </mat-card-title-group>
+              </mat-card>
+             </div>
+        </div>
+        <div>
+
+        <div  class="admin__info__row setting">
+                <h4> You can </h4>
+                <div class="admin__info__row__buttons">
+                    <mat-card>
+                        <button mat-raised-button color="primary" #button data-role="createform">Create a new post</button>
+                        <button mat-raised-button color="primary" #button>Other settings</button>
+
+                    </mat-card>
+                </div>
+                <br/>
+                <ng-container #container></ng-container>
+
+        </div>
+
+    </div>
+</div>

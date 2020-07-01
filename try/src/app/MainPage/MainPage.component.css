@@ -1,0 +1,129 @@
+.banner__area{
+    width:100vw;
+    height:100vh;
+    color:white;
+    border-bottom: 8px solid #222;
+    background-image: url(https://assets.nflxext.com/ffe/siteui/acquisition/ourStory/fuji/desktop/mobile-0819.jpg);
+    background-size: 95px auto;
+    background-position: 110% bottom;
+}
+.banner__button__profile {
+    position: absolute;
+    z-index:99847565759;
+    top:10px;
+    right:20px;
+}
+.banner__errors__items{
+    background-color: #e50914;
+    line-height: normal;
+    padding: 7px 17px;
+    font-weight: 400;
+    font-size: 1rem;
+    transform: translateY(-10px);
+}
+.banner__content{
+    padding-top:60px !important;
+    position: relative;
+    z-index:1;
+}
+.flex__col{
+    flex-direction: column;
+}
+.banner__content__desc{
+    padding: 30px 10%;
+    max-width: 450px;
+    margin: 0 auto;
+    font-weight: 100;
+    font-size: 23px;
+    text-align:center;
+    max-width: 640px;
+
+}
+.banner__content__desc h5{
+    font-weight:100 !important;
+}
+.banner__area{
+    background-color:black;
+}
+.none{
+    display:none;
+}
+.banner__content__input input{
+    height: 60px;
+    padding: 10px 10px 0;
+    width: 100%;
+    font-size: 16px;
+    border: solid 1px #8c8c8c;
+    margin-bottom:10px;
+}
+.banner__content__input button, .banner__button__profile a{
+    color: #fff;
+    background-color: #e50914;
+    margin:10px auto;
+    vertical-align: middle;
+    cursor: pointer;
+    font-weight: 400;
+    letter-spacing: .1px;
+    border-radius: 2px;
+    border:none;
+    font-size: 1rem;
+    min-height: 40px;
+    min-width:200px;
+    text-transform: uppercase;
+    font-size: 1.625rem;
+    margin: 10px 5%;
+    display: flex;
+    padding: 10px 5%;
+    margin-top: 10px;
+    justify-content: center;    
+    outline: none;
+
+}
+#banner__content__input__arrow svg{
+    height: .75em;
+    width: .35em;
+    flex: 0 1 auto;
+    margin: 0 0 0 .5em;
+    position: relative;
+    font-size: 1.625rem;
+}
+.banner__content__input{
+    width:100%;
+
+}
+.banner__content__title{
+    max-width: 640px;
+    margin: 0 auto;
+    font-size: 3.125rem;
+    text-align: center;
+}
+.flex{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.banner__gradient{
+    top: 0;
+    right: 0;
+    width:100%;
+    height:100vh;
+    position: absolute;
+    background-image: linear-gradient(to top,rgba(0,0,0,.8) 0,rgba(0,0,0,0) 60%,rgba(0,0,0,.8) 100%);
+    background: rgba(0,0,0,.4);
+    background-image: linear-gradient(to top,rgba(0,0,0,.8) 0,rgba(0,0,0,0) 60%,rgba(0,0,0,.8) 100%);
+}
+
+.banner__content{
+    max-width: 90%;
+    padding: 0 2%;
+}
+
+.banner__content__input__items{
+    min-height:67px;
+    width:100%;
+}
+
+.banner__button__profile a{
+    font-size:1rem;
+    text-decoration: none;
+}

@@ -1,0 +1,42 @@
+<div class="banner__area flex">
+     <ng-template [ngIf]="user">
+      <div class="banner__button__profile flex" *ngIf="user">
+         <a routerLink="/profile" >My profile
+            <span id="banner__content__input__arrow" class="chevron-right-arrow" data-uia=""><svg viewBox="0 0 6 12" xmlns="http://www.w3.org/2000/svg"><desc>chevron</desc><path d="M.61 1.312l.78-.624L5.64 6l-4.25 5.312-.78-.624L4.36 6z" fill="white" fill-rule="evenodd"></path></svg></span>
+         </a>
+      </div>
+     </ng-template>
+     <!---->
+      <div class="banner__content flex flex__col">
+         <div class="banner__content__title">
+              <h5>Unlimited movies, TV shows, and more. </h5>
+         </div>
+         <div class="banner__content__desc" >
+              <h5>
+               Enter your email to create or restart your membership.
+              </h5>
+         </div>
+         <div class="banner__content__input ">
+              <form class="banner__content__input__items"  [formGroup]="formControl">
+                 <div>
+                    <input type="email" formControlName="email"placeholder="email" id="email"#email emailExists>
+                 </div>
+                 <div>
+                    <input type="password"formControlName="password" placeholder="password" id="password"#password>
+                 </div>
+               </form>
+              <ng-container #errors></ng-container>
+              <ng-template let-error="message" #error__field>
+                  <div class="banner__errors__items">
+                         <div class="banner__errors__fields">{{error}}</div>
+                  </div>
+              </ng-template>
+              <div class="flex" >
+                  <button #signup >Sign Up
+                     <span id="banner__content__input__arrow" class="chevron-right-arrow" data-uia=""><svg viewBox="0 0 6 12" xmlns="http://www.w3.org/2000/svg"><desc>chevron</desc><path d="M.61 1.312l.78-.624L5.64 6l-4.25 5.312-.78-.624L4.36 6z" fill="white" fill-rule="evenodd"></path></svg></span>
+                  </button>
+              </div>
+         </div>
+      </div>
+      <div class="banner__gradient"></div>
+</div>

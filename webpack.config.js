@@ -22,7 +22,7 @@ module.exports= {
         },
       ]
     },
-    externals: [nodeExternals()],
+    externals: [nodeExternals(),{"fs/promises":"require('fs').promises"}],
     target: 'node',
     node: {
       // Need this when working with express, otherwise the build fails

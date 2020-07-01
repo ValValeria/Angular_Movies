@@ -1,41 +1,47 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 
-import SignUp from './SignUp/signUp.component'
-import Main from './main/main.component'
-import {CreatePost} from './CreatePost/CreatePost.component'
-import {FormPost} from './comp/formCreatePost/form.component'
-import { AuthGuard }     from './auth.guard';
-import {Video} from './comp/video/Video.component'
-import { ReactiveFormsModule, FormsModule } from '@angular/forms';
-import {ChildComponent} from './child.component'
-
-import {Card} from './comp/card/card.component'
-import {MainPost} from './SpecialPage/MainPost.component'
-import {Scale} from './directive/scale.directive'
-import {Cut} from './pipes/slice.pipe'
+import { MainPage } from './MainPage/MainPage.component';
+import { ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
-import { HttpClientModule } from '@angular/common/http';
-import { FormDirective } from './directive/form.directive';
-import { HttpService } from './server/http.service';
-import { Channel } from './Channel/channel.component';
-import { Banner_Animation } from './comp/banner/banner.component';
-import { Comments_Component } from './comp/comments/comments.component';
+import { Profile } from './Profile/Profile.component';
+import {MatCardModule} from '@angular/material/card';
+
+import {MatDividerModule} from '@angular/material/divider';
+import {MatFormFieldModule} from '@angular/material/form-field';
+import { CreateForm } from './components/createform/createform.component';
+import {MatButtonModule} from '@angular/material/button';
 
 const routes:Routes=[
-  {path:'',component:Main,resolve:{posts:HttpService}},
-  {path:'post/:id',component:MainPost,resolve:{post:HttpService}},
-  {path:'signup',component:SignUp},
-  {path:'addapost',component:CreatePost,canActivate:[AuthGuard]},
-  {path:'channels',component:Channel,resolve:{channels:HttpService}},
-  { path: '**', redirectTo: '/',pathMatch:'full' }
+  {path:"",component:MainPage},
+  {path:"profile",component:Profile},
+  { path: '**', redirectTo: '/', pathMatch: 'full' },
 ]
 
 @NgModule({
-  imports: [RouterModule.forRoot(routes),ReactiveFormsModule,CommonModule,  FormsModule,
-    HttpClientModule],
-  exports: [RouterModule],
-  declarations:[Comments_Component,Banner_Animation,CreatePost,FormPost,Video,SignUp,ChildComponent,Main,Card,MainPost,Scale,SignUp,Cut,FormDirective],
-  providers:[Cut]
+  imports: [
+    RouterModule.forRoot(routes),
+    ReactiveFormsModule,
+    CommonModule,
+    MatCardModule,
+    MatDividerModule,
+    MatFormFieldModule,
+    MatButtonModule
+  ],
+  declarations:[MainPage,Profile,CreateForm],
+  providers:[],
+  exports:[RouterModule ]
 })
 export class AppRoutingModule { }
+
+/**
+ * declarations: The components, directives, and pipes that belong to this NgModule.
+
+exports: The subset of declarations that should be visible and usable in the component templates of other NgModules.
+
+imports: Other modules whose exported classes are needed by component templates declared in this NgModule.
+
+providers: Creators of services that this NgModule contributes to the global collection of services; they become accessible in all parts of the app. (You can also specify providers at the component level, which is often preferred.)
+
+bootstrap: The main application view, called the root component, which hosts all other app views. Only the root NgModule should set the bootstrap property.
+ */

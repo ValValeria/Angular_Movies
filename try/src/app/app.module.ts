@@ -4,33 +4,35 @@ import { NgModule } from '@angular/core';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 
-import {Header} from './comp/header/header.component'
+import { StoreModule } from '@ngrx/store';
 
-import {HttpService} from './server/http.service';
-import { POSTS, Post,STATUS_USER } from './server/post.service';
-import { Subject } from "rxjs";
-import { HTTP_INTERCEPTORS } from '@angular/common/http';
-import { LoggingInterceptor } from './server/interceptor.service';
-import { Loading } from './comp/loading/loading.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { Move } from './directive/header.directive';
+import { reducer, posts_reducer } from './store/list.reducer';
+import { ConfigService } from './service/http.service';
+import { EffectsModule } from '@ngrx/effects';
+
+import { MovieEffects } from './service/effect.service';
+import { Header } from './components/header/header.component';
+import { ReactiveFormsModule, FormsModule } from '@angular/forms';
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
+import { NoopInterceptor } from './service/intert.service';
+import { MatSliderModule } from '@angular/material/slider';
 
 @NgModule({
   declarations: [
-    AppComponent,Header,Loading,Move
+    AppComponent,Header
   ],
   imports: [
-    BrowserModule,BrowserAnimationsModule,AppRoutingModule
-  ],
+    StoreModule.forRoot({user:reducer,posts:posts_reducer}),
+    BrowserModule,BrowserAnimationsModule,AppRoutingModule,
+    EffectsModule.forRoot([MovieEffects])
+    ,ReactiveFormsModule,  FormsModule,
+    HttpClientModule,MatSliderModule
+    ],
   providers: [
-    {
-    provide:HttpService,useClass:HttpService
-    },
-   {
-      provide:POSTS,useValue:new Subject<Post>()
-    },
-    { provide: HTTP_INTERCEPTORS, useClass: LoggingInterceptor, multi: true },
-    {provide:STATUS_USER,useValue:new Subject<any>()}
+    ConfigService,
+    { provide: HTTP_INTERCEPTORS, useClass: NoopInterceptor, multi: true },
+
   ],
   bootstrap: [AppComponent]
 })

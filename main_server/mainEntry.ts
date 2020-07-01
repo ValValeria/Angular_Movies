@@ -1,12 +1,18 @@
-import { newH } from "./server_mod/routes_handlers/handle";
-import { c } from "./functions/functions";
+
 import path from 'path'
 import express from 'express'
+import multer from 'multer'
+import { Auth } from './handler/url/auth';
+import { handleError } from './functions/function';
+import http from "http"
+import { Handler } from './handler/url/handler';
 
+const cors = require('cors')
 const app=express();
+const server=http.createServer(app);
 const bodyparser=require('body-parser');
 const publicpath:string=path.join(path.dirname(__dirname),'try','public')
-const multer= require('multer');
+
 const upload=multer({
     storage:multer.diskStorage({
         destination: function (_req:any, _file:any, cb:Function) {
@@ -17,42 +23,35 @@ const upload=multer({
         }
     })
 })
+app.use(cors())
 
 app.use(bodyparser.json())
 app.use(bodyparser.urlencoded({extended:true}))
 
-app.use((req:any,resp:any,next:any)=>{
-    newH.status_of_user(req,resp,next)
-});
-app.post('/addpost',upload.single('videoUrl'),(req:any,res:any)=>{
-    c(newH.uploadPost(req,res),res);
+app.use((req,resp,next)=>{
+    handleError(resp,new Handler().authenticate(req,resp,next),next)
 })
-app.use('/public/:filename',(req:any,resp:any,next:any)=>{
-    c(newH.getFile(req,resp,next),resp)
+app.post('/adduser',(req:any,resp:any)=>{
+    handleError(resp,new Handler().signup(req,resp))
 })
-app.post('/users',(req:any,resp:any,next:any)=>{
-    newH.addUser(req,resp,next);
+app.get('/posts',(req:any,resp:any)=>{
+    handleError(resp,new Handler().posts(req,resp))
 })
+app.get('/post/:title',(req:any,resp:any)=>{
+    handleError(resp,new Handler().post(req,resp))
+})
+app.post('/addpost',upload.single('videoUrl'),(req:any,resp:any)=>{
+    handleError(resp,new Handler().addPost(req,resp))
+})
+app.get('/is_user',(req:any,res:any)=>{
+    handleError(res,new Handler().is_user(req,res));
 
-app.post('/status_of_user',(_req:any,res:any,_next:any)=>{
-    res.json(newH.userdata())
 })
+app.get('/email_exists',(req:any,resp:any)=>{
+    handleError(resp,new Handler().emailExists(req,resp))
 
-app.get('/channels',(_req:any,res:any,_next:any)=>{
-    c(newH.channels(_req,res),res);
 })
-
-app.get('/posts',(req:any,res:any,next:any)=>{
-    c(newH.posts(req,res,next),res)
-})
-app.get('/post/:id',(req:any,res:any,next:any)=>{
-    c(newH.post(req,res),res)
- })
-
-app.post('/addcomments',(req:any,res:any,next:Function)=>{
-    c(newH.addComment(req,res),res)
-})
-app.listen(8000,()=>{
+server.listen(8000,()=>{
     console.log('app is running')
 })
 

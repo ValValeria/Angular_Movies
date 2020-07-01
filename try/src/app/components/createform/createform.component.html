@@ -1,0 +1,34 @@
+<mat-card>
+    <div class="createform___area">
+        <div class="createform___area___title">
+             <h6>Create your own post</h6>
+        </div>
+        <div class="createform___area___content">
+            <div class="createform___input_fields">
+                <div>
+                    <label class="createform___content__input__label">Your  title</label>
+                    <input placeholder="Title" [formControl]="title"matNativeControl>
+                    <mat-hint> Max lengths:20 | Min length:4</mat-hint>
+                </div>
+                <mat-divider [inset]="true"></mat-divider>
+                <div>
+                    <label class="createform___content__input__label">Your  video</label>
+                    <input type="file"placeholder="Video"  [formControl]="videoUrl" #file matNativeControl>
+                    <mat-hint> Mime type: video/* </mat-hint>
+                </div>
+
+                <mat-divider [inset]="true"></mat-divider>
+                <ng-template [ngIf]="errors">
+                    <div>
+                        <mat-error>{{errors}}</mat-error>
+                    </div>
+                    <mat-divider [inset]="true"></mat-divider>
+                </ng-template>
+                <div>
+                    <button mat-raised-button	color="link" #button>Submit</button>
+                </div>
+            </div>
+        </div>
+
+</div>
+</mat-card>
