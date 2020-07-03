@@ -2,11 +2,9 @@
 import path from 'path'
 import express from 'express'
 import multer from 'multer'
-import { Auth } from './handler/url/auth';
 import { handleError } from './functions/function';
 import http from "http"
 import { Handler } from './handler/url/handler';
-
 const cors = require('cors')
 const app=express();
 const server=http.createServer(app);
@@ -24,7 +22,9 @@ const upload=multer({
     })
 })
 app.use(cors())
-
+app.use('/public/:filename',(req,res)=>{
+    handleError(res,new Handler().findFile(req,res))
+})
 app.use(bodyparser.json())
 app.use(bodyparser.urlencoded({extended:true}))
 
@@ -33,6 +33,9 @@ app.use((req,resp,next)=>{
 })
 app.post('/adduser',(req:any,resp:any)=>{
     handleError(resp,new Handler().signup(req,resp))
+})
+app.post('/user_posts',(req:any,resp:any)=>{
+    handleError(resp,new Handler().userposts(req,resp))
 })
 app.get('/posts',(req:any,resp:any)=>{
     handleError(resp,new Handler().posts(req,resp))

@@ -1,0 +1,47 @@
+<div class="posts__area">
+    <div class="posts__area__image">
+        <img src="https://assets.nflxext.com/ffe/siteui/vlv3/c385496a-2ed6-4081-9783-49a1ac8a5bbf/fe433a19-977d-4e1d-816c-fbad076f8df0/UA-en-20200629-popsignuptwoweeks-perspective_alpha_website_medium.jpg"/>
+        <div>
+            <p>Good evening or .... ;)</p>
+        </div>
+    </div>
+    <div class="posts__wrap">
+        <div class="posts__content">
+            <div class="posts__content__headline">
+                     Latest video
+            </div>
+        </div>
+        <mat-divider></mat-divider>
+        <div class="posts__content">
+             <div class="posts__content__items">
+                 <div class="posts__content__items__sec">
+                     <ng-template ngFor let-post [ngForOf]="posts$|async">
+                        <mat-card >
+                            <mat-card-title-group>
+                                <mat-card-title>{{post?.title}}</mat-card-title>
+                                <mat-card-subtitle> Author:	{{post?.author.email}}</mat-card-subtitle>
+                            </mat-card-title-group>
+                            <mat-card-content>
+                                <div>
+                                    <video>
+                                        <source src="http://localhost:8000/{{post?.videoUrl}}"/>
+                                    </video>
+                                </div>
+                            </mat-card-content>
+                            <mat-card-actions>
+                                <a routerLink="/posts/{{encode(post?.title)}}"class="link" mat-raised-button color="primary">Watch</a>
+                            </mat-card-actions>
+                        </mat-card>
+                     </ng-template>
+                 </div>
+             </div>
+        </div>
+        <div *ngIf="isLoaded">
+            <mat-paginator [length]="length" (page)="change_page($event)"[pageSize]='perpage'#paginator [disabled]="isEmpty">
+            </mat-paginator>
+        </div>
+
+    </div>
+ </div>
+
+ <footer-main></footer-main>

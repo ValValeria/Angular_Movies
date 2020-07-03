@@ -1,9 +1,9 @@
 import { Injectable } from '@angular/core';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
-import { EMPTY, of } from 'rxjs';
-import { map, mergeMap, catchError, exhaustMap, retry } from 'rxjs/operators';
+import { EMPTY, of, Observable } from 'rxjs';
+import { map, mergeMap, catchError, exhaustMap, retry, concatMap, switchMap } from 'rxjs/operators';
 import { ConfigService } from './http.service';
-import { SIGNUP, SIGNUP_CONF, ADDPOST_s, ADDPOST_confirmed } from '../store/actions/list.actions';
+import { SIGNUP, SIGNUP_CONF, ADDPOST_s, ADDPOST_confirmed, GET_POST } from '../store/actions/list.actions';
 import {  UserResponse } from '../interfaces/interfaces';
 import { Router } from '@angular/router';
  
@@ -43,15 +43,35 @@ export class MovieEffects {
                   return this.moviesService.addpost(formdata)
                         .pipe(
                             map((resp:UserResponse)=>{
-                                if(resp.status='added'){
+                                if(resp.status=='added'){
+                                    this.moviesService.isAdded=true
                                     return {type:ADDPOST_confirmed,post}
                                 }else if(resp.errors.length){
                                     this.moviesService.response.errors.push(resp.errors.join(' | '))
+                                    this.moviesService.isAdded=false;
+
                                 }
                           })
                         )
                })
               )
     })
+
+    $findpost=createEffect(()=>{
+        return this.actions$.pipe(
+               ofType(GET_POST),
+               switchMap(({number,count,countEnd})=>{
+                       if(~count && countEnd){
+                        return this.moviesService.getposts(count,countEnd).pipe(map((post)=>{
+                            return {type:ADDPOST_confirmed,post}
+                        }))
+                       }
+                        return  this.moviesService.getpost(number).pipe(map((post)=>{
+                            return {type:ADDPOST_confirmed,post}
+                        }))              
+                       
+               }),
+               catchError(err =>{ console.log(err);return of(err)})
+               )})
 
 }

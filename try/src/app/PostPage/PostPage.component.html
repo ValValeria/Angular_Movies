@@ -1,0 +1,35 @@
+<div class="posts__area">
+    <div class="posts__wrap">
+        <div class="posts__content">
+            <ng-template [ngIf]="isLoading ">
+                <mat-spinner></mat-spinner>
+            </ng-template>
+            <ng-template [ngIf]="!isLoading ">
+                <div class="button__back">
+                    <a mat-raised-button color="primary" routerLink="{{prevLink}}">Back</a>
+                </div>
+                <div class="posts__content__headline">
+                    Your video
+                </div>
+                <div class="posts__content__item">
+                    <mat-card>
+                        <div class="author__card"><span>Author : </span>  {{post?.author.email || post?.author}}</div>
+                    </mat-card>
+                    <mat-divider></mat-divider>
+                    <div class="posts__content__it__video">
+                        <video src="http://localhost:8000/{{post?.videoUrl}}">
+                        </video>
+                    </div>
+                    <mat-divider></mat-divider>
+                    <mat-card-subtitle>	
+                        <mat-card>
+                            <div>{{post?.title}}</div>
+                        </mat-card>
+                    </mat-card-subtitle>
+
+                </div>
+            </ng-template>
+        </div>
+    </div>
+ </div>
+ <footer-main></footer-main>

@@ -24,6 +24,16 @@
                     </div>
                     <mat-divider [inset]="true"></mat-divider>
                 </ng-template>
+                <!---Messages-->
+                <ng-template [ngIf]="message">
+                    <div class="message__wrap">
+                        <div>
+                            {{message}} <a href='{{link}}'>...Link</a>
+                        </div>
+                    </div>
+                    <mat-divider [inset]="true"></mat-divider>
+                </ng-template>
+                <!---Messages-->
                 <div>
                     <button mat-raised-button	color="link" #button>Submit</button>
                 </div>

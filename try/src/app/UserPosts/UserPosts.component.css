@@ -1,0 +1,26 @@
+.users___posts___area{
+    width:100%;
+}
+.users__posts__wrap{
+    max-width:900px;
+}
+.fl{
+    display: flex;
+    justify-content: space-between;
+}
+.users__posts__title{
+    line-height: 1.5;
+    text-align: center;
+    font-weight: 400;
+    margin: 16px 0;
+    text-transform: uppercase;
+    font-weight: 400;
+    font-size: 16px;
+    letter-spacing: 5px;
+    color: #313d4c;
+}
+.spinner{
+    display: flex;
+    justify-content: center;
+    padding:30px;
+}

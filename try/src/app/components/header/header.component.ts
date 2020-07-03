@@ -1,6 +1,6 @@
 import {Component, ViewContainerRef, HostBinding, ElementRef, ViewChild, Renderer2, ChangeDetectorRef} from '@angular/core'
 import { Router, NavigationStart, RoutesRecognized, NavigationEnd, NavigationCancel } from '@angular/router';
-import { exhaustMap, take, skipUntil, delayWhen } from 'rxjs/operators';
+import { exhaustMap, take, skipUntil, delayWhen, auditTime } from 'rxjs/operators';
 import { interval } from 'rxjs';
 
 @Component({
@@ -9,30 +9,29 @@ import { interval } from 'rxjs';
    styleUrls:['./header.component.css']
 })
 export class Header{
-   isMain:boolean=false
+   isMain:boolean
    classes:string
    class_active:string
    constructor(private router:Router,public detect:ChangeDetectorRef){
       this.classes= `  `
       this.class_active=' active '
+      this.isMain=true
    }
 
    ngOnInit(){
-     this.router.events.pipe(delayWhen((v)=> interval(500).pipe(take(1)))).subscribe((event)=>{
-        if(event instanceof NavigationStart||event instanceof NavigationCancel || event instanceof RoutesRecognized || event instanceof NavigationEnd){
-          if(this.router.url!=="/") {
-            if(!this.classes.includes('header__another__page')){
+     this.router.events.pipe(auditTime(100)).subscribe((event)=>{
+         if(this.router.url!=="/") {
+             if(!this.classes.endsWith('header__another__page')){
                this.classes+='header__another__page'
-               this.class_active=" active2 "
-            }else{
-               this.classes="  "
-               this.class_active=" active "
-            }
+               console.log(this.router.url)
+             }
+            this.class_active=" active2 "
             this.isMain=false;
-          }else    this.isMain=true;
-          
-          this.detect.detectChanges()
-        }
+          }else {
+            this.isMain=true;
+            this.classes="  "
+            this.class_active=" active "
+          }
      })
    }
 }

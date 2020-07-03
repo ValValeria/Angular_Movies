@@ -1,4 +1,4 @@
-import { Component, ViewChildren, ElementRef, ViewChild } from '@angular/core';
+import { Component, ViewChildren, ElementRef, ViewChild, IterableDiffers, DefaultIterableDiffer, ChangeDetectorRef } from '@angular/core';
 import { FormControl, Validators } from '@angular/forms';
 import { merge, fromEvent, Observable } from 'rxjs';
 import { auditTime, skipWhile, takeWhile, map, tap } from 'rxjs/operators';
@@ -20,8 +20,11 @@ import { ConfigService } from 'src/app/service/http.service';
     @ViewChild('button',{read:ElementRef})button:ElementRef
     user:User;
     errors:string=``
+    message:string=``
+    private differ: DefaultIterableDiffer<any>;
+    link: any;
 
-    constructor( private store: Store<State>,private http:ConfigService) {
+    constructor( private store: Store<State>,private http:ConfigService,private differs: IterableDiffers,private detect:ChangeDetectorRef) {
       this.store.pipe(select(user)).subscribe(
           (data)=>{
               let user:User=Object.values(data)[0];
@@ -33,14 +36,17 @@ import { ConfigService } from 'src/app/service/http.service';
     }
 
     ngDoCheck(){
-        if(this.http.response.errors.length){
+        let changes=this.differ.diff(this.http.response.errors);
+        if(changes!=null && this.http.response.errors.length){
             let va=this.http.response.errors.join(' | ');
             if(!this.errors.includes(va))this.errors+=va
         }
     }
     ngOnInit(){
-        this.title=new FormControl('',[Validators.min(4),Validators.max(20)]);
-        this.videoUrl=new FormControl('',[Validators.required])
+        this.title=new FormControl('',[Validators.min(11),Validators.max(20)]);
+        this.videoUrl=new FormControl('',[Validators.required]);
+        this.differ=this.differs.find(this.http.response.errors).create() as DefaultIterableDiffer<any>;
+
         merge(this.title.valueChanges,this.videoUrl.valueChanges)
         .pipe(
             auditTime(600)
@@ -66,8 +72,6 @@ import { ConfigService } from 'src/app/service/http.service';
                    invalid:true
                })
            }
-           console.log(this.videoUrl.status)
-
         })
 
         fromEvent(this.button.nativeElement,'click')
@@ -80,7 +84,13 @@ import { ConfigService } from 'src/app/service/http.service';
             formdata.append('videoUrl',this.file.nativeElement.files[0],this.file.nativeElement.files[0].name)
             this.store.dispatch(ADDPOST({post:{videoUrl:URL.createObjectURL(this.file.nativeElement.files[0]),title:this.title.value,author:this.user._id},
             formdata:formdata
-            }))         
+            }))    
+            this.showMessage(this.title.value)     
         })
+    }
+
+    showMessage(title:string){
+             this.message=` Your post is available at the link`
+             this.link=`/posts/`+encodeURI(title)
     }
  }

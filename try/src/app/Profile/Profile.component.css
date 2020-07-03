@@ -5,6 +5,8 @@
     display: flex;
     flex-direction: column;
     align-items: center;
+    font-family: 'Roboto' !important;
+
 }
 .admin__info__row__author__image{
     margin-left:10px;

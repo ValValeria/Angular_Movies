@@ -4,6 +4,9 @@ import { Store, select } from '@ngrx/store';
 import { filter } from 'rxjs/operators';
 import { CreateForm } from '../components/createform/createform.component';
 import { fromEvent } from 'rxjs';
+import { Router } from '@angular/router';
+import { logout } from '../store/actions/list.actions';
+import { UserPosts } from '../UserPosts/UserPosts.component';
 
 @Component({
     selector:"profile",
@@ -15,10 +18,11 @@ export class Profile{
     @ViewChild('container',{read:ViewContainerRef}) ref:ViewContainerRef
     @ViewChildren('button',{read:ElementRef}) buttons:QueryList<ElementRef>
     map:Map<string,any>;
-    constructor(private store: Store<State>,private componentFactoryResolver: ComponentFactoryResolver){
-        this.map=new Map([
-            ['createform',CreateForm]
-        ]);
+    constructor(private store: Store<State>,private componentFactoryResolver: ComponentFactoryResolver,public router:Router){
+        this.map=new Map();
+        this.map.set('createform',CreateForm)
+        this.map.set('logout',true)
+        this.map.set('showposts',UserPosts)
 
     }
     ngOnInit(){
@@ -32,10 +36,16 @@ export class Profile{
             fromEvent(elem.nativeElement,'click')
             .subscribe(()=>{
                 let d=elem.nativeElement.dataset.role
-                if(this.map.has(d)){
+                if(this.map.has(d) && typeof(this.map.get(d))!=="boolean"){
                     this.ref.clear();
                     let component=this.componentFactoryResolver.resolveComponentFactory(this.map.get(d));
                     this.ref.createComponent(component)
+                }else if(typeof(this.map.get(d))=="boolean"){
+                    if(d=="logout"){
+                        localStorage.removeItem('auth')
+                        this.router.navigateByUrl('/')
+                        this.store.dispatch(logout());
+                    }
                 }
             })
         })

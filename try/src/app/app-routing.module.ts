@@ -6,15 +6,24 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { Profile } from './Profile/Profile.component';
 import {MatCardModule} from '@angular/material/card';
+import {MatPaginatorModule} from '@angular/material/paginator';
 
 import {MatDividerModule} from '@angular/material/divider';
 import {MatFormFieldModule} from '@angular/material/form-field';
 import { CreateForm } from './components/createform/createform.component';
 import {MatButtonModule} from '@angular/material/button';
+import { PostPage } from './PostPage/PostPage.component';
+import { Posts_Page } from './Posts/Posts.component';
+import { AuthGuard } from './auth.guard';
+import { UserPosts } from './UserPosts/UserPosts.component';
+import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
+import { Footer } from './components/footer/footer.component';
 
 const routes:Routes=[
   {path:"",component:MainPage},
-  {path:"profile",component:Profile},
+  {path:"profile",component:Profile,canActivate:[AuthGuard]},
+  {path:"posts",component:Posts_Page,canActivate:[AuthGuard]},
+  {path:'posts/:title',component:PostPage,canActivate:[AuthGuard]},
   { path: '**', redirectTo: '/', pathMatch: 'full' },
 ]
 
@@ -26,11 +35,13 @@ const routes:Routes=[
     MatCardModule,
     MatDividerModule,
     MatFormFieldModule,
-    MatButtonModule
+    MatButtonModule,
+    MatPaginatorModule,
+    MatProgressSpinnerModule
   ],
-  declarations:[MainPage,Profile,CreateForm],
-  providers:[],
-  exports:[RouterModule ]
+  declarations:[MainPage,Profile,CreateForm,PostPage, Posts_Page,UserPosts ,Footer ],
+  exports:[RouterModule ],
+  providers:[AuthGuard]
 })
 export class AppRoutingModule { }
 

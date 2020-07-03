@@ -17,6 +17,7 @@ import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { NoopInterceptor } from './service/intert.service';
 import { MatSliderModule } from '@angular/material/slider';
+import { AuthGuard } from './auth.guard';
 
 @NgModule({
   declarations: [
@@ -31,6 +32,7 @@ import { MatSliderModule } from '@angular/material/slider';
     ],
   providers: [
     ConfigService,
+    AuthGuard,
     { provide: HTTP_INTERCEPTORS, useClass: NoopInterceptor, multi: true },
 
   ],
