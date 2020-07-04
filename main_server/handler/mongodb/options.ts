@@ -1,1 +1,1 @@
-export const url=`mongodb+srv://users:jdjjdjjadjdff@cluster0.xu0mj.mongodb.net/users?retryWrites=true&w=majority`
+export const url=`***************`
