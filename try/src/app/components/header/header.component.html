@@ -7,7 +7,7 @@
                    </h5>
               </div>
               <div class="header__routes  ">
-                   <ng-template [ngIf]="!isMain">
+                   <ng-template [ngIf]="!isMain && isUser">
                       <ul class="header__routes__container flex">
                          <li class="header__routes__items"><a routerLink="/" [routerLinkActive]="class_active" [routerLinkActiveOptions]="{exact: true}">Main</a></li>
                          <li class="header__routes__items"><a routerLink="/profile" [routerLinkActive]="class_active">Profile</a></li>

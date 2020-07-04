@@ -1,7 +1,8 @@
-import {Component, ViewContainerRef, HostBinding, ElementRef, ViewChild, Renderer2, ChangeDetectorRef} from '@angular/core'
-import { Router, NavigationStart, RoutesRecognized, NavigationEnd, NavigationCancel } from '@angular/router';
-import { exhaustMap, take, skipUntil, delayWhen, auditTime } from 'rxjs/operators';
-import { interval } from 'rxjs';
+import {Component, ChangeDetectorRef} from '@angular/core'
+import { Router } from '@angular/router';
+import { auditTime, filter } from 'rxjs/operators';
+import { State } from 'src/app/interfaces/interfaces';
+import { Store, select } from '@ngrx/store';
 
 @Component({
    selector:"myheader",
@@ -12,10 +13,15 @@ export class Header{
    isMain:boolean
    classes:string
    class_active:string
-   constructor(private router:Router,public detect:ChangeDetectorRef){
+   isUser:boolean=false
+   constructor(private router:Router,public detect:ChangeDetectorRef,private store: Store<State>){
       this.classes= `  `
       this.class_active=' active '
-      this.isMain=true
+      this.store.pipe(select('user')).pipe(filter((v:any)=>v.user)).subscribe((data:any)=>{
+        if(data.user['email'] && data.user['password']){
+          setTimeout(()=>this.isUser=true,0);
+        }
+      })
    }
 
    ngOnInit(){

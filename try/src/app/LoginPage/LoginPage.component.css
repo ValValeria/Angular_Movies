@@ -1,0 +1,44 @@
+.login__area{
+    padding-top:150px;
+    width:100vw;
+    min-height:100vh;
+    background-image: url(https://d1o6pphsuqk08k.cloudfront.net/assets/img/svg/clips/purple-large.svg);
+    background-repeat: no-repeat;
+}
+input{
+    margin-top: 16px;
+}
+.login__wrap{
+   width:80%;
+   margin:0 auto;
+   max-width:900px;
+}
+.login__content__form{
+    max-width:500px;
+    margin:0 auto;
+}
+.login__content__title{
+    text-align: center;
+    margin: 16px;
+    font-family: 'Roboto';
+    font-size: 1.5rem;
+    text-transform: uppercase;
+    color: rgba(0,0,0,.87);
+}
+.login__content{
+    max-width: 80%;
+    margin: 0 auto;
+}
+.auth__login__message{
+    font-size: 4.81rem;
+    margin-left: 0;
+    line-height: .95;
+    display: flex;
+    flex-direction: column;
+    padding-left: 14px;
+    /* color: #f3f3f3; */
+    margin: 0;
+    text-align: center;
+    font-family: 'Roboto';
+    color: #25292d;
+}

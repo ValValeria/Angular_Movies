@@ -4,12 +4,17 @@ import { User ,Posts, Post} from '../interfaces/interfaces';
 import { HttpHeaders } from '@angular/common/http';
 import {UserResponse} from '../interfaces/interfaces'
 import { Base } from './base.httpservice';
+import { tap } from 'rxjs/operators';
+import { Subject } from 'rxjs';
 @Injectable({providedIn:'root'})
 export class ConfigService extends Base{
 
   public errors:{[prop:string]:string[]}
   public response:UserResponse
   public isAdded:boolean=false;
+  public status:'user'|'guest'='guest'
+  userstatus$:Subject<boolean>=new Subject()
+
   constructor(public http: HttpClient) {
 
     super();
@@ -21,7 +26,12 @@ export class ConfigService extends Base{
   }
   
   status_of_user(){
-    this.http.get('http://localhost:8000/is_user').subscribe()
+    this.http.get<UserResponse>('http://localhost:8000/is_user').pipe(tap((data)=>{
+        if(data.status=='user') {
+          this.status='user'
+          this.userstatus$.next(true)
+        }
+    })).subscribe()
   }
   sign(user:User){
     const httpOptions = {
@@ -29,7 +39,13 @@ export class ConfigService extends Base{
           'Content-Type':  'application/json',
         })
     };
-    return this.http.post<UserResponse>('http://localhost:8000/adduser',JSON.stringify(user),httpOptions)
+    return this.http.post<UserResponse>('http://localhost:8000/adduser',JSON.stringify(user),httpOptions).
+    pipe(tap((data)=>{
+      if(data.status=='user') {
+        this.status='user'
+        this.userstatus$.next(true)
+      }
+  }))
   }
 
   addpost(formdata:FormData){

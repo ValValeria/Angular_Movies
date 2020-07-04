@@ -1,0 +1,42 @@
+<div class="login__area">
+        <div class="login__wrap">
+           <div class="login__content"*ngIf="!isUser">
+                 <div class="login__content__title">Login</div>
+                  <mat-card>
+                    <div class="login__content__form">
+                        <mat-error>{{message}}</mat-error>
+                        <mat-horizontal-stepper linear>
+                           <mat-step [stepControl]="emailGroup">
+                               <form [formGroup]="emailGroup">
+                                  <ng-template matStepLabel>Fill out your email</ng-template>
+                                  <mat-form-field>
+                                      <input matInput formControlName="email" placeholder="Your email" required min="10" max="20">
+                                  </mat-form-field>
+                                  <div>
+                                      <button mat-button matStepperNext>Next</button>
+                                  </div>
+                               </form>
+                           </mat-step>
+                           <mat-step [stepControl]="passwordGroup">
+                              <form [formGroup]="passwordGroup" >
+                                 <ng-template matStepLabel>Fill out your password</ng-template>
+                                 <mat-form-field>
+                                     <input type="password" matInput formControlName="password" placeholder="Your password" required min="10" max="20">
+                                 </mat-form-field>
+                                 <div>
+                                     <button mat-button matStepperPrevious>Back</button>
+                                     <button mat-button #click >Submit</button>
+                                 </div>
+                              </form>
+                          </mat-step>
+                        </mat-horizontal-stepper>
+                  </div>
+                  </mat-card>
+           </div>
+           <div class="auth__login" *ngIf="isUser"> 
+                    <div class="auth__login__message">
+                       <h6>Вы вошли в систему</h6>
+                    </div>
+           </div>
+        </div>
+</div>

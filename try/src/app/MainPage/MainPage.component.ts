@@ -8,8 +8,6 @@ import { signup } from '../store/actions/list.actions';
 import { FormControl, Validators, FormGroup } from '@angular/forms';
 import { FormBuilder } from '@angular/forms';
 import { ConfigService } from '../service/http.service';
-import { Router } from '@angular/router';
-
 
 @Component(
     {
@@ -50,7 +48,8 @@ export class MainPage{
       formControl:FormGroup;
       user:boolean;
       public completed :boolean=false;
-      constructor(private render:Renderer2,private store: Store<State>, formbuilder:FormBuilder,private http:ConfigService,private router:Router){ 
+      constructor(private render:Renderer2,private store: Store<State>,
+         formbuilder:FormBuilder,private http:ConfigService,){ 
         this.formControl=formbuilder.group({
           email:['',[Validators.required,Validators.email,Validators.maxLength(20),Validators.minLength(10)]],
           password:['',[Validators.required,Validators.maxLength(20),Validators.minLength(10)]]
@@ -135,8 +134,8 @@ export class MainPage{
            })
         )
         .subscribe(()=>{
-
         })
       }
-    
+
+
 }

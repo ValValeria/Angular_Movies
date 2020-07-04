@@ -18,12 +18,17 @@ import { AuthGuard } from './auth.guard';
 import { UserPosts } from './UserPosts/UserPosts.component';
 import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
 import { Footer } from './components/footer/footer.component';
+import {MatDialogModule} from '@angular/material/dialog';
+import {MatStepperModule} from '@angular/material/stepper';
+import { LoginPage } from './LoginPage/LoginPage.component';
+import {MatInputModule} from '@angular/material/input';
 
 const routes:Routes=[
   {path:"",component:MainPage},
   {path:"profile",component:Profile,canActivate:[AuthGuard]},
   {path:"posts",component:Posts_Page,canActivate:[AuthGuard]},
   {path:'posts/:title',component:PostPage,canActivate:[AuthGuard]},
+  {path:'login',component:LoginPage},
   { path: '**', redirectTo: '/', pathMatch: 'full' },
 ]
 
@@ -37,9 +42,12 @@ const routes:Routes=[
     MatFormFieldModule,
     MatButtonModule,
     MatPaginatorModule,
-    MatProgressSpinnerModule
+    MatProgressSpinnerModule,
+    MatDialogModule,
+    MatStepperModule,
+    MatInputModule
   ],
-  declarations:[MainPage,Profile,CreateForm,PostPage, Posts_Page,UserPosts ,Footer ],
+  declarations:[MainPage,Profile,CreateForm,PostPage, Posts_Page,UserPosts ,Footer,LoginPage ],
   exports:[RouterModule ],
   providers:[AuthGuard]
 })

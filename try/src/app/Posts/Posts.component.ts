@@ -1,4 +1,4 @@
-import { Component, ViewChild } from "@angular/core";
+import { Component, ViewChild, ViewContainerRef, ViewChildren, QueryList, ViewRef, ElementRef } from "@angular/core";
 import { Store } from '@ngrx/store';
 import { GET_POST_A, TRUNCATE_STORE_A } from '../store/actions/list.actions';
 import { Posts } from '../interfaces/interfaces';
@@ -19,12 +19,14 @@ export class Posts_Page extends BaseClass{
     data_num: Map<any ,any>=new Map();
     isEmpty:boolean=true;
     isLoaded:boolean=false;
-    length:number=4
+    length:number=4;
+    message:string=`Loading...`;
+    @ViewChildren('card',{read:ElementRef}) card:QueryList<ElementRef>
+
     @ViewChild('paginator',{read:MatPaginator}) paginator:MatPaginator
-    constructor(public store:Store<Posts>,public http:ConfigService){
+    constructor(public store:Store<Posts>,public http:ConfigService,public view:ViewContainerRef){
         super();
         this.posts$=this.store.select(state=>state.posts).pipe(map((data:any)=>{
-            this.isLoaded=true;
             if(data.posts.length){
                 if(data.posts.length>=this.perpage){this.isEmpty=false;}
                 this.data_num.set('posts',data.post)
@@ -43,7 +45,16 @@ export class Posts_Page extends BaseClass{
         this.store.dispatch(TRUNCATE_STORE_A())
         this.change_page()
     }
-    
+    videoError($event){
+        let id:number=Number(($event.target as HTMLElement).parentElement.id)
+        this.card.forEach((elem,index)=>{
+           if(index==id){
+               elem.nativeElement.classList.add('none')
+           }
+        })
+        this.message=`Произошла ошибка. Возможно, это связано со скоростью интернета. Пожалуйста, перезагрузите страницу`
+        this.isLoaded=false;
+    }
     change_page($event?:PageEvent){
         if($event){
             this.data_num.set('start',$event.pageIndex*$event.pageSize)

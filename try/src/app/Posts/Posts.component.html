@@ -1,7 +1,8 @@
 <div class="posts__area">
     <div class="posts__area__image">
         <img src="https://assets.nflxext.com/ffe/siteui/vlv3/c385496a-2ed6-4081-9783-49a1ac8a5bbf/fe433a19-977d-4e1d-816c-fbad076f8df0/UA-en-20200629-popsignuptwoweeks-perspective_alpha_website_medium.jpg"/>
-        <div>
+        <div class="after"></div>
+        <div class="posts__area__title">
             <p>Good evening or .... ;)</p>
         </div>
     </div>
@@ -14,17 +15,26 @@
         <mat-divider></mat-divider>
         <div class="posts__content">
              <div class="posts__content__items">
+                 <!--
+                     Loader
+                 -->
+                 <div class="loader__area" *ngIf="!isLoaded">
+                    <div class="loader__content">
+                        <mat-spinner></mat-spinner>
+                        <h5>{{message}}</h5>
+                    </div>
+                 </div>
+                 <!--Loader End-->
                  <div class="posts__content__items__sec">
-                     <ng-template ngFor let-post [ngForOf]="posts$|async">
-                        <mat-card >
+                     <ng-template ngFor let-post [ngForOf]="posts$|async" let-index="index">
+                        <mat-card #card>
                             <mat-card-title-group>
                                 <mat-card-title>{{post?.title}}</mat-card-title>
                                 <mat-card-subtitle> Author:	{{post?.author.email}}</mat-card-subtitle>
                             </mat-card-title-group>
                             <mat-card-content>
-                                <div>
-                                    <video>
-                                        <source src="http://localhost:8000/{{post?.videoUrl}}"/>
+                                <div  id="{{index}}">
+                                    <video (canplay)="isLoaded=true" (error)="videoError($event)" src="http://localhost:8000/{{post?.videoUrl}}">
                                     </video>
                                 </div>
                             </mat-card-content>

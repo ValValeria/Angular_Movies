@@ -6,6 +6,12 @@
          </a>
       </div>
      </ng-template>
+     <!--Login-->
+     <div class="banner__button__profile flex" *ngIf="!user">
+       <a routerLink="/login" >Login 
+         <span id="banner__content__input__arrow" class="chevron-right-arrow" data-uia=""><svg viewBox="0 0 6 12" xmlns="http://www.w3.org/2000/svg"><desc>chevron</desc><path d="M.61 1.312l.78-.624L5.64 6l-4.25 5.312-.78-.624L4.36 6z" fill="white" fill-rule="evenodd"></path></svg></span>
+       </a>
+     </div>
      <!---->
       <div class="banner__content flex flex__col">
          <div class="banner__content__title">
