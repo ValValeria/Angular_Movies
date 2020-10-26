@@ -1,6 +1,10 @@
 # Angular_Movies
-NodeJs, Ts , HTML, CSS, Angular,RxJs, NgRx
-# try - Angular app
-npm run start
-# main_server - backend
-npm run start
+Using the app, you can add and watch movies
+
+## How to run the app
+* `cd try`
+* `npm run start`
+In the another terminal
+* `cd main_server`
+* `npm run start`
+
